@@ -1,0 +1,78 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #0d1117;
+    font-family: 'Ubuntu', sans-serif;
+    height: 100vh;
+}
+
+header {
+    display: flex;
+    height: 48px;
+    width: auto;
+    text-align: center;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #11151b;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #1c222c;
+}
+
+header h1 {
+    color: aliceblue;
+}
+
+.header_the {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 18px;
+}
+
+.header_spacechat {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 19px;
+}
+
+.alert {
+    margin: auto;
+    width: 80%;
+    margin-bottom: 20px;
+}
+
+.alert_contact {
+    display: flex;
+    justify-content: center;
+    color: azure;
+    border-radius: 3px;
+    overflow: hidden;
+    height: fit-content;
+    width: fit-content;
+    width: 100%;
+}
+
+.alert_contact div {
+    padding: 10px;
+    width: 30px;
+    align-items: center;
+    text-align: center;
+    background-color: #0AA1DD;
+    border: 0;
+    border-right: 2px solid #19abe5;
+}
+.alert_contact div img {
+    top: 10%;
+    position: relative;
+}
+.alert_contact p {
+    font-size: 17px;
+    padding: 10px;
+    width: 100%;
+    text-align: start;
+    background-color: #0AA1DD;
+}

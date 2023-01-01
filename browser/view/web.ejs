@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- APIs LINKs -->
+    <link href="../public/index.css" rel="stylesheet">
+    <link href="../public/web.css" rel="stylesheet">
+    <link href="../public/stars.css" rel="stylesheet">
+
+    <link href="/index.css" rel="stylesheet">
+    <link href="/web.css" rel="stylesheet">
+    <link href="/stars.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+    <!-- END THE APIs LINKs -->
+
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYQ2V8RF4B"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-PYQ2V8RF4B');
+    </script>
+
+    <!-- Google Ads -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2169339772509887"
+        crossorigin="anonymous"></script>
+
+    <title>Thespacechat</title>
+</head>
+
+<body>
+    <header>
+        <h1 class="header_the">THE </h1> &nbsp;
+        <h1 class="header_spacechat">SPACECHAT </h1> &nbsp;
+        <img class="logo" src="/icons/thespacechat.png" width="42px">
+    </header>
+
+    <!-- SECTION -->
+    <div id="space_loading">
+        <div class="container_space">
+            <div class="container">
+                <div class="monitor">
+                    <div class="opening">
+                        <div class="camera o-x">
+                            <div class="camera o-y">
+                                <div class="camera o-z">
+                                    <div class="awing">
+                                        <div class="stars">
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                            <div class="star"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="error"></div>
+    <!-- #1 ENTER TO THE SECTION 2 -->
+    <div id="access" style="display: none;">
+
+        <div class="access_title">
+            Enter an exist username and password and pincode or create new one, with thespacechat it really
+            doesn't matter.
+        </div>
+
+        <div id="access_mes">
+
+        </div>
+
+        <div class="fill_data">
+            <div class="input_title"> Username </div>
+            <div class="username_section">
+                <input type="text" id="username" placeholder="" autocomplete="off">
+                <p>#</p> <input type="text" id="pincode" placeholder="" autocomplete="off">
+            </div>
+
+            <div class="input_title"> Password </div>
+            <div class="password_section">
+                <input type="text" id="password" placeholder="" autocomplete="off">
+            </div>
+        </div>
+        <div class="drop_data" id="drop_data">
+
+        </div>
+        <div id="enter_click">
+            Enter
+        </div>
+    </div>
+    <!-- #2 HERE WILL BE THE WEBAPP -->
+    <div id="chat" style="display: none">
+        <div class="main_slider">
+            <div class="selectItem" id="messages" onclick="select(0)">
+                <img class="lightOff" src="/icons/message-regular.svg" width="24px">
+            </div>
+            <div class="selectItem" id="searching" onclick="select(1)">
+                <img class="lightOff" src="/icons/meteor-solid.svg" width="24px">
+            </div>
+            <div class="selectItem" id="you" onclick="select(2)">
+                <img class="lightOff" src="/icons/user-astronaut-solid.svg" width="24px">
+            </div>
+        </div>
+        <div id="main_container">
+            <div class="loading">
+                ...
+            </div>
+        </div>
+    </div>
+    <!-- END SECTION -->
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../public/web.js"></script>
+    <script src="/web.js"></script>
+</body>
+
+</html>
