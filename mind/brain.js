@@ -3,6 +3,9 @@ const x = {
 
 }
 
+const xSingle = []
+const xGroup = []
+
 // COCKING TO CREATE DNA/ID ..
 var dnaIndex = {
     "a": '54', "b": '1', "c": '2', "d": '3', "e": '4',
@@ -130,7 +133,10 @@ function socket(io) {
                     "requests": [],
 
                     // SECURITY DATA
-                    "connected": true
+                    "connected": true,
+                    "randomlySingle": false,
+                    "match": {},
+                    "online": "",
                 }
 
                 socket.emit("dna-ok", { connected: true, id: idUser, username: username_x })
@@ -179,7 +185,7 @@ function socket(io) {
                 return false
             }
 
-            if(userdata.connected === false){
+            if (userdata.connected === false) {
                 socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
                 return false
             }
@@ -230,6 +236,93 @@ function socket(io) {
             }
             userInfo(id[1])
         })
+
+        // ENTER RANDOMLY SPACE ..
+        socket.on("randomlySingle", e => {
+            var myId = userdata.id
+            // CHECK USER ID
+            if (idCheck(myId)[0] === false || userdata.connected === false) {
+                socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
+                return false
+            }
+
+            x[myId].randomlySingle = true
+            x[myId].online = ""
+            // RUN SEARCHING METHOD ..
+            searchRandomly()
+        })
+
+        // GET RESPONES OF RANDOMLY SPACE ..
+        socket.on("randomly", e => {
+            matchRandomly(e)
+        })
+
+        function searchRandomly() {
+            var myId = userdata.id
+            // CHECK USER ID
+            if (idCheck(myId)[0] === false || userdata.connected === false) {
+                socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
+                return false
+            }
+
+            if (xSingle.length > 0) {
+                var didFind = false
+                for (var i = 0; i < xSingle.length; i++) {
+                    var a = xSingle[i]
+                    if (!x[myId].bans.includes(a) && x[a].randomlySingle === true) {
+                        didFind = true
+                        x[a].randomlySingle = false
+                        singleTree(myId, false)
+                        singleTree(a, false)
+                        x[a].online = myId
+                        io.to(x[a].socketId).emit("randomly-ok", { id: myId, username : x[myId].username })
+                        socket.emit("randomly-ok", { id: a, username : x[a].username })
+                        break;
+                    }
+                }
+                if (didFind === false) {
+                    // PUSAH IT & LET SOMEONE PICK IT ..
+                    singleTree(myId, true)
+                }
+            } else {
+                // PUSAH IT & LET SOMEONE PICK IT ..
+                singleTree(myId, true)
+
+            }
+        }
+
+        function singleTree(id, c) {
+            if (c === true) {
+                // ADD TO TREE
+                if (xSingle.includes(id) === false) {
+                    xSingle.push(id)
+                }
+            } else {
+                // DELETE FROM TREE
+                if (xSingle.includes(id) === true) {
+                    const index = xSingle.indexOf(id);
+                    if (index > -1) {
+                        xSingle.splice(index, 1);
+                    }
+                }
+            }
+        }
+
+        function matchRandomly(id) {
+            var myId = userdata.id
+            // CHECK USER ID
+            if (idCheck(myId)[0] === false || userdata.connected === false) {
+                socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
+                return false
+            }
+
+            if (x[myId].online === id) {
+                // RIGHT MATCH ..
+                socket.emit("randomly-ok", { id: id })
+            } else {
+                return false
+            }
+        }
 
         socket.on("disconnect", e => {
             if (idCheck(userdata.id)[0] === false) {

@@ -238,7 +238,7 @@ function searching() {
             <div class="inputSearch"> <input type="search" id="search" placeholder="Search for someone by Id .." ></div>
         </div>
         
-        <div id="reandomly_search"> <div id="stars"></div> <h3>Enter in space!</h3> <p>Search for randomly person.</p> </div>
+        <div id="reandomly_search" onclick="randomlySingle()"> <div id="stars"></div> <h3>Enter in space!</h3> <p>Search for randomly person.</p> </div>
 
     </div>`
     container_react(con)
@@ -398,15 +398,15 @@ function strTime() {
 
 function sendMessage(id) {
     var mm = document.getElementById("message_input").value
-    if(mm.length > 0){
+    if (mm.length > 0) {
         socket.emit("sendMessage", {
             message: mm,
             id: id
         })
-    
+
         var message = [mm, strTime(), false]
         xu.messages[id].messages.push(message)
-    
+
         mes([mm, strTime()], false)
         document.getElementById("message_input").value = ""
     }
@@ -450,7 +450,7 @@ function mes(m, c) {
     }
     document.getElementById("chatting_container_box").appendChild(mm)
 
-    if (scrollHeight === true){
+    if (scrollHeight === true) {
         chattingContainer.scrollTo(0, chattingContainer.scrollHeight);
     } else {
         // PRINT NOTE
@@ -461,12 +461,12 @@ function mes(m, c) {
     heighChange = chattingContainer.scrollHeight + chattingContainer.scrollTop
 }
 
-function scrollChattingBox(){
+function scrollChattingBox() {
     var chattingContainer = document.getElementById("chatting_container")
     var newMessageNote = document.getElementById("new_message_note")
     heighChange = chattingContainer.scrollHeight + chattingContainer.scrollTop
 
-    if(heighChange >= heighNow){
+    if (heighChange >= heighNow) {
         scrollHeight = true
         newMessageNote.innerHTML = ``
     } else {
@@ -474,7 +474,7 @@ function scrollChattingBox(){
     }
 }
 
-function scrollChatting(){
+function scrollChatting() {
     var chattingContainer = document.getElementById("chatting_container")
     var newMessageNote = document.getElementById("new_message_note")
 
@@ -520,6 +520,25 @@ function messageRequests() {
     <div class="messages_ghost"><div class="ghost_top"> <h2> Message requests </h2> <p onclick="messageRequests()">Refresh</p></div> <div class="ghosts"> ${rm()} </div> </div>`
     container_react(con)
 }
+
+
+function randomlySingle() {
+    socket.emit("randomlySingle")
+}
+
+socket.on("randomly-ok", e => {
+    var id = e.id
+    var username = e.username
+    // ADD IN HISTORY IF WAS NEW
+    if (id in xu.messages === false) {
+        xu.messages[id] = {
+            "username": username,
+            "messages": []
+        }
+    }
+
+    chattingRoom(false, id)
+})
 
 // ERROR MESSAGE
 socket.on("disconnect", (e) => {
