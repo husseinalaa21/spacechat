@@ -238,7 +238,7 @@ function socket(io) {
         })
 
         // ENTER RANDOMLY SPACE ..
-        socket.on("randomlySingle", e => {
+        socket.on("randomly", e => {
             var myId = userdata.id
             // CHECK USER ID
             if (idCheck(myId)[0] === false || userdata.connected === false) {
@@ -246,15 +246,18 @@ function socket(io) {
                 return false
             }
 
-            x[myId].randomlySingle = true
-            x[myId].online = ""
-            // RUN SEARCHING METHOD ..
-            searchRandomly()
-        })
-
-        // GET RESPONES OF RANDOMLY SPACE ..
-        socket.on("randomly", e => {
-            matchRandomly(e)
+            if (e === true) {
+                x[myId].randomlySingle = true
+                x[myId].online = ""
+                // SEND RES ..
+                socket.emit("randomly-res", { state: x[myId].randomlySingle })
+                // RUN SEARCHING METHOD ..
+                searchRandomly()
+            } else {
+                x[myId].randomlySingle = false
+                x[myId].online = ""
+                singleTree(myId, false)
+            }
         })
 
         function searchRandomly() {
@@ -269,15 +272,17 @@ function socket(io) {
                 var didFind = false
                 for (var i = 0; i < xSingle.length; i++) {
                     var a = xSingle[i]
-                    if (!x[myId].bans.includes(a) && x[a].randomlySingle === true) {
+                    if (a in x && a != myId && !x[myId].bans.includes(a) && x[a].randomlySingle === true) {
                         didFind = true
                         x[a].randomlySingle = false
                         singleTree(myId, false)
                         singleTree(a, false)
                         x[a].online = myId
-                        io.to(x[a].socketId).emit("randomly-ok", { id: myId, username : x[myId].username })
-                        socket.emit("randomly-ok", { id: a, username : x[a].username })
+                        io.to(x[a].socketId).emit("randomly-ok", { id: myId, username: x[myId].username })
+                        socket.emit("randomly-ok", { id: a, username: x[a].username })
                         break;
+                    } else if (!a in x) {
+                        singleTree(a, false)
                     }
                 }
                 if (didFind === false) {
@@ -294,7 +299,7 @@ function socket(io) {
         function singleTree(id, c) {
             if (c === true) {
                 // ADD TO TREE
-                if (xSingle.includes(id) === false) {
+                if (!xSingle.includes(id)) {
                     xSingle.push(id)
                 }
             } else {

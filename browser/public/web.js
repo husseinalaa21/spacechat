@@ -523,7 +523,23 @@ function messageRequests() {
 
 
 function randomlySingle() {
-    socket.emit("randomlySingle")
+    socket.emit("randomly", true)
+}
+
+socket.on("randomly-res", e => {
+    var time = strTime()
+    var state = e.state
+    var con = `<div class="backArrow" onclick="searching()"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div> <div class="randomly">  <div class="randomly_title"> SEARCHING FOR ALIAN .. </div> <div class="randomly_container"><p>time start : ${time}</p><p> state : ${state} </p></div> <div class="randomly_end" onclick="randomlyStop(true)"> stop searching </div> </div>`
+    container_react(con)
+})
+
+function randomlyStop(e) {
+    socket.emit("randomly", false)
+    if(e === true){
+        searching()
+    } else {
+        document.getElementById("randomly_note").innerHTML = ``
+    }
 }
 
 socket.on("randomly-ok", e => {

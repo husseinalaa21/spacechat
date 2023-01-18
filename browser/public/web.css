@@ -105,6 +105,7 @@
     color: rgb(237, 248, 248);
     text-align: center;
 }
+
 .err a {
     color: whitesmoke;
 }
@@ -512,11 +513,13 @@
     height: auto;
     font-size: 17px;
 }
-.chatting_container_box div p{
+
+.chatting_container_box div p {
     font-size: 17px;
     font-weight: 580;
 }
-.chatting_container_box div span{
+
+.chatting_container_box div span {
     margin-top: 30px;
     font-size: 15px;
     font-weight: 580;
@@ -527,7 +530,8 @@
     margin: 8px 10px 6px auto;
     border-radius: 8px 8px 2px 8px;
 }
-.mme:last-child{
+
+.mme:last-child {
     border-radius: 8px 8px 8px 8px !important;
 }
 
@@ -537,7 +541,7 @@
     border-radius: 8px 8px 8px 2px;
 }
 
-.youu:last-child{
+.youu:last-child {
     border-radius: 8px 8px 8px 8px !important;
 }
 
@@ -664,7 +668,8 @@
     border: 1px solid #24292f;
     cursor: pointer;
 }
-.ghost_top p:hover{
+
+.ghost_top p:hover {
     background-color: #24292f;
 }
 
@@ -688,10 +693,12 @@
     border: 0;
     border-left: 3px solid #1363DF;
 }
+
 .ghost h3 {
     font-size: 19px;
     padding: 6px 6px 6px 8px;
 }
+
 .ghost p {
     padding: 4px 4px 8px 4px;
     font-size: 17px;
@@ -710,19 +717,20 @@
     border: 1px solid #1a1f26;
     cursor: pointer;
 }
-.alian h3{
+
+.alian h3 {
     font-size: 20px;
     margin-bottom: 10px;
 }
 
-.alian div{
+.alian div {
     display: flex;
     justify-content: space-between;
 }
 
 .options {
     display: flex;
-    justify-content:space-around;
+    justify-content: space-around;
     width: 95%;
     margin: 25px auto 15px auto;
 }
@@ -749,7 +757,7 @@
 
 .friend {
     border: 2px solid rgb(4, 111, 183);
-    background-color:rgb(4, 111, 183);
+    background-color: rgb(4, 111, 183);
     color: #FFF;
 }
 
@@ -765,16 +773,58 @@
 .logOut {
     padding: 10px;
     margin: 30px auto 10px auto;
-    background-color:rgba(142, 42, 42, 0.364);
+    background-color: rgba(142, 42, 42, 0.364);
     border: 1px solid rgba(142, 42, 42, 0.823);
     font-size: 17px;
     border-radius: 4px;
     cursor: pointer;
     transition: 0.5s;
 }
-.logOut:hover{
-    background-color:rgb(142, 42, 42);
+
+.logOut:hover {
+    background-color: rgb(142, 42, 42);
 }
+
+.monitor {
+    position:absolute;
+}
+
+.randomly {
+    position: absolute;
+    width: 100%;
+    height: 60%;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.randomly_title {
+    font-size: 13px;
+    padding: 10px;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.randomly_end {
+    padding: 8px;
+    border-radius: 2px;
+    font-size: 18px;
+    background-color: rgb(175, 69, 69);
+    cursor: pointer;
+    position: absolute;
+    width: 90%;
+    margin: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin-bottom: 20px;
+}
+
+.randomly_container {
+    text-align: left;
+    padding: 20px;
+    z-index: 100;
+    position: absolute;
+}
+
 /* ********** ******************************** */
 /* ********** ********************* ********** */
 /* ********** ***** ANIMATION ***** ********** */
@@ -870,4 +920,3 @@
         background-position: 0% 50%
     }
 }
-
