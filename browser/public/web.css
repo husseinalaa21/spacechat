@@ -825,6 +825,14 @@
     position: absolute;
 }
 
+.features_title {
+    font-size: 22px;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-left: 4px solid #3d7cc8;
+    background-color: #11161d;
+    color: #e3e6eb;
+}
 /* ********** ******************************** */
 /* ********** ********************* ********** */
 /* ********** ***** ANIMATION ***** ********** */
