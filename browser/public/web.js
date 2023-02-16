@@ -535,7 +535,7 @@ socket.on("randomly-res", e => {
 
 function randomlyStop(e) {
     socket.emit("randomly", false)
-    if(e === true){
+    if (e === true) {
         searching()
     } else {
         document.getElementById("randomly_note").innerHTML = ``
@@ -563,3 +563,16 @@ socket.on("disconnect", (e) => {
 socket.on("err", e => {
     err.innerHTML = `<div class="err"> ${e}, <a href="/web"> (Refresh) </a></div>`
 })
+
+
+// DATA 
+var idsTypeData = { 0: {id : "thespacechat_data"}, 1: {id : "googleDrive_data"} }
+var typeData = -1
+function select_data(id) {
+    for (td in idsTypeData){
+       document.getElementById(idsTypeData[td].id).className = "data_select"
+    }
+    if (typeData !== id) {
+        document.getElementById(idsTypeData[id].id).className = "data_select data_select_true"
+    }
+}
