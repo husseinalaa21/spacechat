@@ -907,6 +907,18 @@
     text-decoration-style: wavy;
     text-decoration-color: #d7e9f75f;
 }
+
+.thespacechatDataLoaded {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    background-color:#18b2cd5a;
+    border: 1px solid #18b2cdf9;
+}
+
+.googleDataLoaded {
+    margin-top: 15px;
+}
 /* ********** ******************************** */
 /* ********** ********************* ********** */
 /* ********** ***** ANIMATION ***** ********** */

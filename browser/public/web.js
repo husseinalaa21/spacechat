@@ -566,13 +566,22 @@ socket.on("err", e => {
 
 
 // DATA 
-var idsTypeData = { 0: {id : "thespacechat_data"}, 1: {id : "googleDrive_data"} }
+var idsTypeData = { 0: { id: "thespacechat_data", system: thespacechatdrive }, 1: { id: "googleDrive_data", system: googledrive } }
 var typeData = -1
 function select_data(id) {
-    for (td in idsTypeData){
-       document.getElementById(idsTypeData[td].id).className = "data_select"
+    for (td in idsTypeData) {
+        document.getElementById(idsTypeData[td].id).className = "data_select"
     }
     if (typeData !== id) {
         document.getElementById(idsTypeData[id].id).className = "data_select data_select_true"
+        idsTypeData[id].system()
     }
+}
+
+function thespacechatdrive() {
+    document.getElementById("upload_data_mes").innerHTML = `<div class="thespacechatDataLoaded"> If there is any data connected with this account, it will loaded after login. </div>`
+}
+
+function googledrive() {
+    document.getElementById("upload_data_mes").innerHTML = `<div class="googleDataLoaded"> Sorry, This method not available yet. </div>`
 }
