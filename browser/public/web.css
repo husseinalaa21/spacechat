@@ -39,7 +39,15 @@
     border-radius: 4px;
     overflow: hidden;
 }
-
+.fill_data_form p {
+    color:rgb(214, 218, 223);
+    font-size: 15px;
+    margin-top: 10px;
+    padding: 3px;
+}
+.fill_data_form p a{
+    color:rgb(112, 167, 234);
+}
 .fill_data_form {
     padding: 17px;
 }

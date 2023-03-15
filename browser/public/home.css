@@ -64,8 +64,9 @@
     color: #cccccc;
     text-decoration: none;
     font-size: 16px;
-    background-color: #606b7f76;
-    border-radius: 3px;
+    border: 2px solid #606b7f76;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .webEnter {
@@ -81,7 +82,7 @@
     font-size: 16px;
     border: 2px solid #457cd6;
     background-color: #457cd6;
-    border-radius: 7px;
+    border-radius: 4px;
 }
 
 .arrow_right {

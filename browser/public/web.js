@@ -20,6 +20,7 @@ var dna = {
 const xu = {
     // STOREAGE DATA
     id: "",
+    idP: "",
     username: "",
     bio: " Hey! This is your bio.. ",
     picure: "",
@@ -72,6 +73,7 @@ window.onload = () => {
         var pin = Math.floor(1000 + Math.random() * 9000);
         pincode.placeholder = pin
         dna.pincode = pin
+        select_data(0)
     }
 }
 
@@ -103,6 +105,7 @@ socket.on("dna-ok", e => {
         // SET DATA ~STORAGE
         xu.id = e.id
         xu.username = e.username
+        xu.idP = e.id + e.idP
 
         // SET DATA ~BROWESER
         document.cookie = `username=${dna.username}; path=/`;
@@ -566,8 +569,9 @@ socket.on("err", e => {
 
 
 // DATA 
-var idsTypeData = { 0: { id: "thespacechat_data", system: thespacechatdrive }, 1: { id: "googleDrive_data", system: googledrive } }
+var idsTypeData = { 0: { id: "thespacechat_data", system: web3driver }, 1: { id: "googleDrive_data", system: googledrive } }
 var typeData = -1
+
 function select_data(id) {
     for (td in idsTypeData) {
         document.getElementById(idsTypeData[td].id).className = "data_select"
@@ -578,7 +582,7 @@ function select_data(id) {
     }
 }
 
-function thespacechatdrive() {
+function web3driver() {
     document.getElementById("upload_data_mes").innerHTML = `<div class="thespacechatDataLoaded"> If there is any data connected with this account, it will loaded after login. </div>`
 }
 

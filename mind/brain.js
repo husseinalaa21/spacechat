@@ -39,6 +39,39 @@ var dnaAbc = {
     "9": 'x',
 }
 
+// COCKING TO CREATE DNA/ID PRIVATE ..
+var dnaIndex_p = {
+    "a": '68', "b": '9', "c": '65', "d": '53', "e": '74',
+    "f": '3', "g": '7', "h": '3', "i": '2', "j": '1',
+    "k": '27', "l": '18', "m": '6', "n": '5', "o": '4',
+    "p": '51', "q": '1', "r": '13', "s": '71', "t": '12',
+    "u": '20', "v": '21', "w": '22', "x": '23', "y": '8',
+    "z": '2', "_": '41', "-": '19',
+
+    "A": '83', "B": '13', "C": '10', "D": '16', "E": '24',
+    "F": '55', "G": '42', "H": '5', "I": '26', "J": '32',
+    "K": '15', "L": '11', "M": '17', "N": '61', "O": '28',
+    "P": '34', "Q": '33', "R": '95', "S": '56', "T": '37',
+    "U": '66', "V": '81', "W": '25', "X": '91', "Y": '52',
+    "Z": '52', "#": '38',
+
+    "1": '35', "2": '72', "3": '93', "4": '44', "5": '69',
+    "6": '85', "7": '64', "8": '46', "9": '97', "0": '29'
+}
+
+var dnaAbc_p = {
+    "0": 'y',
+    "1": 'h',
+    "2": 'c',
+    "3": 's',
+    "4": 'p',
+    "5": 'z',
+    "6": 'v',
+    "7": 'b',
+    "8": 'u',
+    "9": 'r',
+}
+
 // #BRAIN
 function socket(io) {
     io.on('connection', socket => {
@@ -79,43 +112,43 @@ function socket(io) {
             var friends = []
             var bans = []
 
-            var userId = 0
-            var passId = 0
-            var isNan = false
+            // CREATE ID
+            function idGen(dnaAbc_y, dnaIndex_y) {
+                function splitN(n) {
+                    var nn = 0
+                    n.split('').forEach(e => {
+                        if (dnaIndex_y[e] || e !== Number) {
+                            nn = nn + Number(dnaIndex_y[e])
+                        } else {
+                            return 0
+                        }
+                    });
+                    return nn
+                }
 
-            username.split('').forEach(e => {
-                if (isNan === false) {
-                    if (dnaIndex[e] || e !== Number) {
-                        userId = userId + Number(dnaIndex[e])
-                    } else {
-                        isNan = true
-                    }
+                var userId = splitN(username)
+                var passId = splitN(password)
+                var idUser = ""
+
+                if (userId > 0 && passId > 0) {
+                    var userpass = `${userId + passId}`
+                    var userpasspin = `${Number(userId) + Number(passId) + Number(pincode)}`
+                    var idX = `${userId}${userpass}${passId}${userpasspin}`.split("")
+                    idX[userpass.slice(-1)] = dnaAbc_y[`${userId}`.slice(-1)]
+                    idX[userpasspin.slice(-1)] = dnaAbc_y[`${passId}`.slice(-1)]
+                    idX[`${userId}`.slice(-1)] = dnaAbc_y[userpass.slice(-1)]
+                    idX[`${passId}`.slice(-1)] = dnaAbc_y[userpasspin.slice(-1)]
+                    idUser = idX.join("").substring(0, 13);
                 }
-            });
-            password.split('').forEach(e => {
-                if (isNan === false) {
-                    if (dnaIndex[e] || e !== Number) {
-                        passId = passId + Number(dnaIndex[e])
-                    } else {
-                        isNan = true
-                    }
-                }
-            });
+
+                return idUser
+            }
 
             // CHECK THE ID AND SEND THE RESPONSE AND SAVE THE DATA IF IT'S OK ..
+            var idUser = idGen(dnaAbc, dnaIndex)
+            var idUserPrivate = idGen(dnaAbc_p, dnaIndex_p)
 
-            if (isNan === false && userId > 0 && passId > 0) {
-                // CREATE ID
-                var userpass = `${userId + passId}`
-                var userpasspin = `${Number(userId) + Number(passId) + Number(pincode)}`
-                var idX = `${userId}${userpass}${passId}${userpasspin}`.split("")
-                idX[userpass.slice(-1)] = dnaAbc[`${userId}`.slice(-1)]
-                idX[userpasspin.slice(-1)] = dnaAbc[`${passId}`.slice(-1)]
-
-                idX[`${userId}`.slice(-1)] = dnaAbc[userpass.slice(-1)]
-                idX[`${passId}`.slice(-1)] = dnaAbc[userpasspin.slice(-1)]
-                const idUser_x = idX.join("")
-                const idUser = idUser_x.substring(0, 13);
+            if (idUser.length > 0) {
                 const username_x = username.charAt(0).toUpperCase() + username.slice(1) + " " + idUser.substring(idUser.length - 4).toUpperCase();
 
                 // SET DATA
@@ -139,7 +172,7 @@ function socket(io) {
                     "online": "",
                 }
 
-                socket.emit("dna-ok", { connected: true, id: idUser, username: username_x })
+                socket.emit("dna-ok", { connected: true, id: idUser, username: username_x, idP: idUserPrivate })
 
             } else {
                 socket.emit("dna-ok", { connected: false, mes: "looks like you enterd a unvalid username or password." })
