@@ -46,43 +46,22 @@
 .enter_space {
     margin: 50px auto 20px auto;
     width: 100%;
-    display: flex;
-    justify-content: space-between;
-    font-weight: 600;
-}
-
-.ai {
-    padding: 10px;
-    width: 40%;
-    max-width: 300px;
-    margin-left: 20px;
-    text-align: center;
-    margin-right: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #cccccc;
-    text-decoration: none;
-    font-size: 16px;
-    border: 2px solid #606b7f76;
-    border-radius: 4px;
-    cursor: pointer;
 }
 
 .webEnter {
-    padding: 10px;
-    width: 80%;
-    max-width: 500px;
+    font-family: 'Righteous', cursive;
+    padding: 13px;
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
     color: aliceblue;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 18px;
     border: 2px solid #457cd6;
     background-color: #457cd6;
     border-radius: 4px;
+    font-weight: 400;
 }
 
 .arrow_right {
@@ -92,6 +71,21 @@
 .webEnter a:hover {
     transition: 0.3s;
     background-color: #457cd6;
+}
+
+.ai {
+    min-height: 80px; 
+    border-bottom: 2px solid #1c222c;
+    padding-top: 20px;
+    background-color: #11151b;
+}
+
+.ai h2 {
+    font-family: 'Righteous', cursive;
+    width: 90%;
+    max-width: 1400px;
+    margin: auto;
+    font-size: 24px;
 }
 
 .discription {
