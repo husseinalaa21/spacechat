@@ -27,3 +27,7 @@ app.get('/', (req, res) => {
 app.get('/web', (req, res) => {
     res.render('web')
 })
+
+app.get('/rouls', (req, res) => {
+    res.render('rouls')
+})
