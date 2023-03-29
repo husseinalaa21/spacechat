@@ -838,39 +838,54 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .randomly {
-    position: absolute;
-    width: 100%;
-    height: 60%;
-    margin-top: 10px;
-    text-align: center;
+    height: 100%;
+    position: relative;
+    z-index: 100;
+    margin: auto;
+}
+
+.randomly_container {
+    min-height: 400px;
+}
+
+.randomly_main {
+    width: 90%;
+    margin: auto;
+    border-radius: 4px;
 }
 
 .randomly_title {
-    font-size: 13px;
-    padding: 10px;
-    font-family: 'Press Start 2P', cursive;
+    font-size:24px;
+    font-family: 'Righteous', cursive;
+    background-color: #11151b;
+    padding: 15px 25px 25px 25px;
+    border-bottom: 10px cornflowerblue;
 }
 
 .randomly_end {
-    padding: 8px;
-    border-radius: 2px;
+    padding: 14px;
+    font-family: 'Righteous', cursive;
     font-size: 18px;
-    background-color: rgb(175, 69, 69);
+    background: #EA5455;
     cursor: pointer;
-    position: absolute;
-    width: 90%;
+    margin: 20px;
+    border-radius: 3px;
     margin: auto;
     left: 0;
     right: 0;
-    bottom: 0;
-    margin-bottom: 20px;
+    text-align: center;
 }
 
 .randomly_container {
     text-align: left;
-    padding: 20px;
     z-index: 100;
-    position: absolute;
+}
+
+.randomly_info {
+    background-color: #457cd6;
+    background: linear-gradient(-45deg, #528be8, #5fd6f7, #0095ff, #2192FF);
+    padding: 10px;
+    font-size: 17px;
 }
 
 .features_title {
