@@ -240,7 +240,6 @@ function searching() {
             <div id="search_buttom" onclick="searchId(true)"> <img src="/icons/magnifying-glass-solid.svg"> </div>
             <div class="inputSearch"> <input type="search" id="search" placeholder="Search for someone by Id .." ></div>
         </div>
-        <h3 class="features_title"> Features and more  </h3>
         <div id="reandomly_search" onclick="randomlySingle()"> <div id="stars"></div> <h3>Enter in space!</h3> <p>Search for randomly person.</p> </div>
 
     </div>`
