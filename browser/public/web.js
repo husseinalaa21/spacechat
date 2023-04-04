@@ -165,6 +165,7 @@ function container_react(con) {
     main_container.innerHTML = con
     // RESTART EVERYTHING
     xu.chattingRoom = false
+    xu.randomlySingle = false
 }
 
 function messages() {
@@ -351,6 +352,8 @@ function chattingRoom(back, id) {
             return `onclick="messageRequests()"`
         } else if (back === false) {
             return `onclick="searchId(false, '${id}')"`
+        } else if(back === "exitRandomly"){
+            return `onclick="exitRandomly()"`
         } else {
             return `onclick="messages()"`
         }
@@ -528,10 +531,15 @@ function randomlySingle() {
     socket.emit("randomly", true)
 }
 
+function exitRandomly() {
+    socket.emit("randomly", false)
+    xu.randomlySingle = false
+    searching()
+}
+
 socket.on("randomly-res", e => {
-    var state = e.state
     var con = `
-    <div class="backArrow" onclick="searching()"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>
+    <div class="backArrow" onclick="exitRandomly()"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>
     <div class="randomly_main">
     <div class="panel">
         <div class="h_panel">
@@ -1070,10 +1078,12 @@ socket.on("randomly-res", e => {
     </div>
     </div>`
     container_react(con)
+    xu.randomlySingle = true
 })
 
 function randomlyStop(e) {
     socket.emit("randomly", false)
+    xu.randomlySingle = false
     if (e === true) {
         searching()
     } else {
@@ -1082,17 +1092,21 @@ function randomlyStop(e) {
 }
 
 socket.on("randomly-ok", e => {
-    var id = e.id
-    var username = e.username
-    // ADD IN HISTORY IF WAS NEW
-    if (id in xu.messages === false) {
-        xu.messages[id] = {
-            "username": username,
-            "messages": []
+    if(xu.randomlySingle === true){
+        // CHECK IF THE USER IN THE SEARCHING ROOM ..
+        var id = e.id
+        var username = e.username
+        xu.randomlySingle = false
+        // ADD IN HISTORY IF WAS NEW
+        if (id in xu.messages === false) {
+            xu.messages[id] = {
+                "username": username,
+                "messages": []
+            }
         }
+    
+        chattingRoom("exitRandomly", id)
     }
-
-    chattingRoom(false, id)
 })
 
 // ERROR MESSAGE
