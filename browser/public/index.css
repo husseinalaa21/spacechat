@@ -27,16 +27,8 @@ header {
 
 header h1 {
     color: aliceblue;
-}
-
-.header_the {
     font-family: 'Press Start 2P', cursive;
-    font-size: 18px;
-}
-
-.header_spacechat {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 19px;
+    font-size: 20px;
 }
 
 .alert {

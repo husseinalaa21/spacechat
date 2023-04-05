@@ -25,10 +25,14 @@
 }
 
 .introduction {
-    font-family: 'Righteous', cursive;
+    padding: 10px;
+    width: 90%;
+    max-width: 1400px;
+    margin: auto;
 }
 
 .introduction h1 {
+    font-family: 'Righteous', cursive;
     font-size: 26px;
     margin: 10px auto 20px auto;
     border: 0;
@@ -36,15 +40,16 @@
 }
 
 .introduction h1 mark {
-    color: #99c6f6;
+    color: white;
     background-color: #0d111700;
-    font-size: 26px;
-    text-decoration: underline;
+    font-size: 28px;
+    text-decoration:underline;
     text-decoration-style: wavy;
+    text-decoration-color: #79b3ff;
 }
 
 .enter_space {
-    margin: 50px auto 20px auto;
+    margin: 50px auto 50px auto;
     width: 100%;
 }
 
@@ -88,27 +93,98 @@
 }
 
 .discription {
-    line-height: 26px;
-    font-size: 17px;
+    line-height: 27px;
+    font-size: 18px;
+    padding-top: 10px;
     color: gainsboro;
 }
 
-.defaultX {
-    padding: 10px;
+.dashbord {
+    background-color: #11151b;
+    font-family: 'Righteous', cursive;
+}
+
+.dashbord h1 {
+    padding: 25px;
+    max-width: 1400px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    font-size: 27px;
+    width: 80%;
+    margin: auto;
+}
+
+.dashbord_mine {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto auto;
+    margin: auto;
+    border: 0;
+    border-top: 1px solid #1c222c;
+    margin-top: 10px;
+}
+
+.dashbord_mine a {
+    padding: 20px;
+    font-size: 17px;
+    color: #cccccc;
+    text-decoration: none;
+    text-align: center;
+}
+
+.dashbord_mine a:hover {
+    background-color: #0095ff;
+}
+
+
+.mask {
+    border: 0;
+    border-left: 3px;
+    border-style: solid;
+    border-image: 
+      linear-gradient(
+        to bottom, 
+        #57b9ff, 
+        #043d66,
+        #57b9ff,
+        #043d66
+      ) 1 100%;
     width: 90%;
+    margin: auto;
+}
+
+.sectionY {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.sectionY span {
+    height: 8px;
+    width: 8px;
+    background-color: #0d1117;
+    border: 2.4px solid #57b9ff;
+    border-radius: 50%;
+    display: inline-block;
+    position: absolute;
+    margin-left: -7.5px;
+}
+
+.sectionY h1 {
+    font-size: 29px;
+    padding: 15px;
+    width: 80%;
     max-width: 1400px;
     margin: auto;
 }
 
 .sectionX {
-    margin: 20px auto 10px auto;
-}
-
-.sectionX h1 {
-    font-size: 29px;
-    padding: 15px;
-    border: 0;
-    border-left: 4px solid #457cd6;
+    padding: 10px;
+    width: 80%;
+    max-width: 1400px;
+    margin: 0px auto 10px auto;
 }
 
 .sectionX p {
