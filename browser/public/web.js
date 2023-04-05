@@ -166,6 +166,7 @@ function container_react(con) {
     // RESTART EVERYTHING
     xu.chattingRoom = false
     xu.randomlySingle = false
+    socket.emit("randomly", false)
 }
 
 function messages() {
