@@ -30,7 +30,8 @@ const xu = {
     messages: {},
     // SYSTEM DATA
     currentId: "",
-    chattingRoom: false
+    chattingRoom: false,
+    onlineId: ""
 }
 
 function xGet(cname) {
@@ -165,8 +166,6 @@ function container_react(con) {
     main_container.innerHTML = con
     // RESTART EVERYTHING
     xu.chattingRoom = false
-    xu.randomlySingle = false
-    socket.emit("randomly", false)
 }
 
 function messages() {
@@ -236,16 +235,27 @@ function you() {
 }
 
 function searching() {
-    var con = `
-    <div class="space_container">
-        <div class="search_section">
-            <div id="search_buttom" onclick="searchId(true)"> <img src="/icons/magnifying-glass-solid.svg"> </div>
-            <div class="inputSearch"> <input type="search" id="search" placeholder="Search for someone by Id .." ></div>
-        </div>
-        <div id="reandomly_search" onclick="randomlySingle()"> <div id="stars"></div> <h3>Enter in space!</h3> <p>Search for randomly person.</p> </div>
-
-    </div>`
-    container_react(con)
+    // CHECK IF THE USER WAS IN CHATTING ROOM ..
+    if (xu.randomlySingle === true) {
+        // IF THE USER WAS MATCH ..
+        var id = xu.onlineId
+        if(id !== ""){
+            chattingRoom("exitRandomly", id)
+        } else {
+            exitRandomly()
+        }
+    } else {
+        var con = `
+        <div class="space_container">
+            <div class="search_section">
+                <div id="search_buttom" onclick="searchId(true)"> <img src="/icons/magnifying-glass-solid.svg"> </div>
+                <div class="inputSearch"> <input type="search" id="search" placeholder="Search for someone by Id .." ></div>
+            </div>
+            <div id="reandomly_search" onclick="randomlySingle()"> <div id="stars"></div> <h3>Enter in space!</h3> <p>Search for randomly person.</p> </div>
+    
+        </div>`
+        container_react(con)
+    }
 }
 
 function searchId(s, t) {
@@ -353,7 +363,7 @@ function chattingRoom(back, id) {
             return `onclick="messageRequests()"`
         } else if (back === false) {
             return `onclick="searchId(false, '${id}')"`
-        } else if(back === "exitRandomly"){
+        } else if (back === "exitRandomly") {
             return `onclick="exitRandomly()"`
         } else {
             return `onclick="messages()"`
@@ -388,6 +398,7 @@ function chattingRoom(back, id) {
     `
     container_react(con)
     xu.currentId = id
+    xu.currentName = username
     xu.chattingRoom = true
 }
 
@@ -539,6 +550,7 @@ function exitRandomly() {
 }
 
 socket.on("randomly-res", e => {
+    xu.randomlySingle = true
     var con = `
     <div class="backArrow" onclick="exitRandomly()"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>
     <div class="randomly_main">
@@ -1079,7 +1091,6 @@ socket.on("randomly-res", e => {
     </div>
     </div>`
     container_react(con)
-    xu.randomlySingle = true
 })
 
 function randomlyStop(e) {
@@ -1093,11 +1104,10 @@ function randomlyStop(e) {
 }
 
 socket.on("randomly-ok", e => {
-    if(xu.randomlySingle === true){
-        // CHECK IF THE USER IN THE SEARCHING ROOM ..
+    // CHECK IF THE USER IN THE SEARCHING ROOM ..
+    if (xu.randomlySingle === true) {
         var id = e.id
         var username = e.username
-        xu.randomlySingle = false
         // ADD IN HISTORY IF WAS NEW
         if (id in xu.messages === false) {
             xu.messages[id] = {
@@ -1105,7 +1115,8 @@ socket.on("randomly-ok", e => {
                 "messages": []
             }
         }
-    
+
+        xu.onlineId = id
         chattingRoom("exitRandomly", id)
     }
 })
