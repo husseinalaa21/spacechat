@@ -63,7 +63,7 @@
     color: aliceblue;
     text-decoration: none;
     font-size: 18px;
-    border: 2px solid #457cd6;
+    border: 3px solid #5b87ce;
     background-color: #457cd6;
     border-radius: 4px;
 }
@@ -111,7 +111,7 @@
     justify-content: left;
     align-items: center;
     font-size: 26px;
-    width: 80%;
+    width: 87%;
     margin: auto;
 }
 
@@ -169,7 +169,7 @@
     border-radius: 50%;
     display: inline-block;
     position: absolute;
-    margin-left: -7.5px;
+    margin-left: -7.4px;
 }
 
 .sectionY h1 {
@@ -225,4 +225,5 @@
     margin: 20px auto 10px auto;
     font-size: 15px;
     color: #cccccc;
+    font-family: 'Righteous', cursive;
 }
