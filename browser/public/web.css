@@ -778,45 +778,88 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .options {
-    display: flex;
-    justify-content: space-around;
     width: 95%;
+    display: flex;
+    justify-content: space-between;
     margin: 25px auto 15px auto;
+    align-items: center;
 }
 
-.option {
+.sendMessage_option {
     margin: 5px;
-    width: 100%;
-    max-width: 400px;
+    width: 60%;
     cursor: pointer;
     text-align: center;
     border-radius: 9px;
     font-size: 17px;
     font-weight: 600;
     padding: 11px;
-}
-
-.sendTrue {
     background-color: rgb(29, 155, 240);
 }
 
-.sendFalse {
-    background-color: #272e38;
+.user_options {
+    margin: 5px;
+    width: 40%;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 9px;
+    font-size: 17px;
+    font-weight: 600;
+    padding: 11px;
+    background-color: #31353a;
+}
+
+.userOptions {
+    width: 95%;
+    margin: 10px auto 20px auto;
+    font-size: 16px;
+    background-color: #31353a;
+    border-radius: 10px;
+    font-weight: 600;
+    overflow: hidden;
+}
+
+.userOptions div {
+    padding: 15px 10px 15px 10px;
+    cursor: pointer;
 }
 
 .friend {
-    border: 2px solid rgb(4, 111, 183);
     background-color: rgb(4, 111, 183);
-    color: #FFF;
 }
 
 .request {
-    border: 2px solid rgb(4, 111, 183);
-    color: #FFF;
+    background-color: #293545;
 }
 
-.request:hover {
-    background-color: rgb(4, 111, 183);
+.unBan {
+    background-color: rgb(183, 34, 4);
+}
+
+.lists {
+    display: grid;
+    grid-template-columns: auto auto;
+    margin: 30px auto auto auto;
+    border-radius: 4px;
+    background-color: #12171e;
+    min-height: 200px;
+}
+
+.lists div{
+    padding: 17px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.list_title {
+    font-size: 19px;
+    font-weight: 600;
+    color: rgb(210, 209, 209);
+}
+.list_subtitle {
+    font-size: 15px;
+    font-weight: 600;
+    color: rgb(171, 171, 171);
 }
 
 .logOut {

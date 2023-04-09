@@ -3,6 +3,7 @@ const x = {
 
 }
 
+// RANDOMLY TREES ~ ONLY IDS
 const xSingle = []
 const xGroup = []
 
@@ -76,8 +77,8 @@ var dnaAbc_p = {
 function socket(io) {
     io.on('connection', socket => {
 
+        // USER DATA
         const userdata = {
-            // USER DATA
             "id": "",
             "socketId": "",
             "username": "",
@@ -109,8 +110,6 @@ function socket(io) {
             var username = e.username
             var password = e.password
             var pincode = Number(e.pincode)
-            var friends = []
-            var bans = []
 
             // CREATE ID
             function idGen(dnaAbc_y, dnaIndex_y) {
@@ -161,14 +160,10 @@ function socket(io) {
                     // USER DATA
                     "socketId": userdata.socketId,
                     "username": username_x,
-                    "friends": friends,
-                    "bans": bans,
-                    "requests": [],
 
                     // SECURITY DATA
                     "connected": true,
                     "randomlySingle": false,
-                    "match": {},
                     "online": "",
                 }
 
@@ -181,33 +176,23 @@ function socket(io) {
 
 
         // SEARCH FOR USER ->
-        function userInfo(id) {
-            // RETURN INFORMATION ->
-            var username = "Alian #404"
-            var state = "new"
-
-            if (x[userdata.id].friends.includes(id)) {
-                state = "friend"
-            } else if (x[userdata.id].bans.includes(id)) {
-                state = "ban"
-            }
-
-            // GET INFO FROM THIS USER
-            if (id in x) {
-                username = x[id].username
-            }
-
-            socket.emit("userInfo", { id: id, username: username, state: state })
-        }
-
         socket.on("searchId", e => {
-            var id = idCheck(e.id)
+            var id = idCheck(e.id)[1]
             if (idCheck(userdata.id)[0] === false || userdata.connected === false) {
                 socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
                 return false
             }
 
-            userInfo(id[1])
+            // USER INFORMATION
+            var username = "Alian #404"
+
+            if (id in x) {
+                // SET THE INFORMATION
+                username = x[id].username
+            }
+
+            // SEND THE INFORMATION
+            socket.emit("userInfo", { id: e.id, username: username })
         })
 
         // SEND MESSAGE ->
@@ -223,65 +208,29 @@ function socket(io) {
                 return false
             }
 
-            if (x[id[1]].bans.includes(userdata.id)) {
-                // USER BLOCK THIS USER
-                return false
-            } else if (x[id[1]].friends.includes(userdata.id)) {
-                // USER IS FRIEND OF THIS USER
-                io.to(x[id[1]].socketId).emit('message', { message: e.message, id: userdata.id, username: userdata.username })
-            } else if (x[id[1]].requests.includes(userdata.id)) {
-                // THIS USER ALREDY ASK THIS USER
-                return false
-            } else {
-                // NEW MESSAGE FROM THIS USER TO THIS USER
-                // ADD POINT / LIMIT FOR REQUESTED
-                io.to(x[id[1]].socketId).emit('message', { message: e.message, id: userdata.id, username: userdata.username })
-            }
-        })
-
-        // HANDLING THE REQUESTS/MESSAGES ->
-        socket.on("handling_user", e => {
-            var id = idCheck(e.id)
-            if (idCheck(userdata.id)[0] === false || userdata.connected === false) {
-                socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
-                return false
-            }
-
-            var state = e.state
-
-            if (state === "friend" && x[userdata.id].friends.includes(id[1]) === false) {
-                x[userdata.id].friends.push(id[1])
-            } else if (state === "ban" && x[userdata.id].bans.includes(id[1]) === false) {
-                x[userdata.id].bans.push(id[1])
-            } else {
-                // REMOVE IT FROM DATA // CLEAN PEAPER
-                function cleaner(arr) {
-                    var index = arr.indexOf(id[1])
-                    if (index > -1) {
-                        arr.splice(index, 1);
-                    }
-                    return arr
-                }
-                var newFriends = x[userdata.id].friends
-                var newBans = x[userdata.id].bans
-                x[userdata.id].friends = cleaner(newFriends)
-                x[userdata.id].bans = cleaner(newBans)
-            }
-            userInfo(id[1])
+            // SEND THE MESSAGE TO THIS USER ..
+            io.to(x[id[1]].socketId).emit('message', { message: e.message, id: userdata.id, username: userdata.username })
         })
 
         // ENTER RANDOMLY SPACE ..
         socket.on("randomly", e => {
             var myId = userdata.id
+            // RANDOMLY DATA **** LARG DATA MOST BE DELETED AFTER CONNECTED **** RANDOMLY USERS DATA (rud)
+            var rud = []
+            if(Array.isArray(e.rud)){
+                rud = e.rud
+            }
+
             // CHECK USER ID
             if (idCheck(myId)[0] === false || userdata.connected === false) {
                 socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
                 return false
             }
 
-            if (e === true) {
+            if (e.s === true) {
                 x[myId].randomlySingle = true
                 x[myId].online = ""
+                x[myId].rud = rud
                 // SEND RES ..
                 socket.emit("randomly-res", { state: x[myId].randomlySingle })
                 // RUN SEARCHING METHOD ..
@@ -289,6 +238,7 @@ function socket(io) {
             } else {
                 x[myId].randomlySingle = false
                 x[myId].online = ""
+                x[myId].rud = []
                 singleTree(myId, false)
             }
         })
@@ -305,12 +255,15 @@ function socket(io) {
                 var didFind = false
                 for (var i = 0; i < xSingle.length; i++) {
                     var a = xSingle[i]
-                    if (a in x && a != myId && !x[myId].bans.includes(a) && x[a].randomlySingle === true) {
+                    if (a in x && a != myId && !x[myId].rud.includes(a) && !x[a].rud.includes(myId) && x[a].randomlySingle === true) {
                         didFind = true
                         x[a].randomlySingle = false
                         singleTree(myId, false)
                         singleTree(a, false)
                         x[a].online = myId
+                        x[myId].online = myId
+                        x[myId].rud = []
+                        x[a].rud = []
                         io.to(x[a].socketId).emit("randomly-ok", { id: myId, username: x[myId].username })
                         socket.emit("randomly-ok", { id: a, username: x[a].username })
                         break;
@@ -346,28 +299,13 @@ function socket(io) {
             }
         }
 
-        function matchRandomly(id) {
-            var myId = userdata.id
-            // CHECK USER ID
-            if (idCheck(myId)[0] === false || userdata.connected === false) {
-                socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
-                return false
-            }
-
-            if (x[myId].online === id) {
-                // RIGHT MATCH ..
-                socket.emit("randomly-ok", { id: id })
-            } else {
-                return false
-            }
-        }
-
         socket.on("disconnect", e => {
             if (idCheck(userdata.id)[0] === false) {
                 return false
             }
             userdata.connected = false
             x[userdata.id].connected = false
+            x[userdata.id].rud = []
             socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
         })
     })

@@ -239,7 +239,7 @@ function searching() {
     if (xu.randomlySingle === true) {
         // IF THE USER WAS MATCH ..
         var id = xu.onlineId
-        if(id !== ""){
+        if (id !== "") {
             chattingRoom("exitRandomly", id)
         } else {
             exitRandomly()
@@ -252,7 +252,11 @@ function searching() {
                 <div class="inputSearch"> <input type="search" id="search" placeholder="Search for someone by Id .." ></div>
             </div>
             <div id="reandomly_search" onclick="randomlySingle()"> <div id="stars"></div> <h3>Enter in space!</h3> <p>Search for randomly person.</p> </div>
-    
+
+            <!--<div class="lists">
+                <div onclick="showFriends"> <div class="list_title"> Friends </div> <div class="list_subtitle"> ${xu.friends.length} friends </div> </div>
+                <div onclick="showBands"> <div class="list_title"> Bands </div> <div class="list_subtitle"> ${xu.bans.length} bands </div> </div>
+            </div>-->
         </div>`
         container_react(con)
     }
@@ -267,61 +271,20 @@ function searchId(s, t) {
         val = t
     }
     // AFTER GET THE THE ID .. SEARCH
-    socket.emit("searchId", {
-        id: val
-    })
+    socket.emit("searchId", { id: val })
 }
 
 socket.on("userInfo", e => {
     var username = e.username
     var id = e.id
-    var state = e.state
     var pic = "/icons/ghost-solid.svg"
     var bio = "Here is the bio!"
-
-    // SET INFO / THIS SIDE
-    if (state === "friend" && xu.friends.includes(id) === false) {
-        xu.friends.push(id)
-    } else if (state === "ban" && xu.bans.includes(id) === false) {
-        xu.bans.push(id)
-    } else if (state === "new") {
-        // REMOVE IT FROM DATA // CLEAN PEAPER
-        function cleaner(arr) {
-            var index = arr.indexOf(id)
-            if (index > -1) {
-                arr.splice(index, 1);
-            }
-            return arr
-        }
-        var newFriends = xu.friends
-        var newBans = xu.bans
-        xu.friends = cleaner(newFriends)
-        xu.bans = cleaner(newBans)
-    }
 
     // ADD IN HISTORY IF WAS NEW
     if (id in xu.messages === false) {
         xu.messages[id] = {
             "username": username,
             "messages": []
-        }
-    }
-
-    var smessage = () => {
-        if (state === "ban") {
-            return `<div class="option sendFalse"> Write a message </div>`
-        } else {
-            return `<div class="option sendTrue" onclick="chattingRoom(false,'${id}')"> Write a message </div>`
-        }
-    }
-
-    var setState = () => {
-        if (state === "friend") {
-            return `<div class="option friend" onclick="handling_user('request','${id}')"> UnFriend </div>`
-        } else if (state === "ban") {
-            return `<div class="option ban" onclick="handling_user('request','${id}')"> UnBan </div>`
-        } else {
-            return `<div class="option request" onclick="handling_user('friend','${id}')"> Add Friend </div>`
         }
     }
 
@@ -341,17 +304,62 @@ socket.on("userInfo", e => {
             <div class="result_bio">${bio}</div>
             
             <div class="options">
-                ${setState()}
-                ${smessage()}
+                <div class="user_options" onclick="userOptions('${id}', true)"> More </div>
+                <div class="sendMessage_option" onclick="chattingRoom(false,'${id}')"> Write a message </div>
             </div>
+
+            <div id="userState"></div>
 
         </div>
     </div>`
     container_react(con)
 })
 
+var userOptions_glich = false
+function userOptions(id, s) {
+    if (s === true && userOptions_glich === true) {
+        document.getElementById("userState").innerHTML = ""
+        userOptions_glich = false
+    } else {
+        var friend = `<div class="option request" onclick="handling_user('friend','${id}')"> Add Friend </div>`
+        var ban = `<div class="option ban" onclick="handling_user('ban','${id}')"> Block </div>`
+        if (xu.friends.includes(id)) {
+            friend = `<div class="option friend" onclick="handling_user('request','${id}')"> Friend </div>`
+        } else if (xu.bans.includes(id)) {
+            ban = `<div class="option unBan" onclick="handling_user('ban','${id}')"> UnBlock </div>`
+        }
+        var con = `<div class="userOptions"> ${friend} ${ban} </div>`
+
+        document.getElementById("userState").innerHTML = con
+        userOptions_glich = true
+    }
+}
+
 function handling_user(state, id) {
-    socket.emit("handling_user", { state, id })
+    // REMOVE IT FROM DATA // CLEAN PEAPER
+    function cleaner(arr) {
+        var index = arr.indexOf(id)
+        if (index > -1) {
+            arr.splice(index, 1);
+        }
+        return arr
+    }
+
+    if (state === "friend" && xu.friends.includes(id) === false) {
+        xu.friends.push(id)
+        var newBans = xu.bans
+        xu.bans = cleaner(newBans)
+    } else if (state === "ban" && xu.bans.includes(id) === false) {
+        xu.bans.push(id)
+        var newFriends = xu.friends
+        xu.friends = cleaner(newFriends)
+    } else {
+        var newFriends = xu.friends
+        var newBans = xu.bans
+        xu.friends = cleaner(newFriends)
+        xu.bans = cleaner(newBans)
+    }
+    userOptions(id, false)
 }
 
 function chattingRoom(back, id) {
@@ -398,7 +406,6 @@ function chattingRoom(back, id) {
     `
     container_react(con)
     xu.currentId = id
-    xu.currentName = username
     xu.chattingRoom = true
 }
 
@@ -430,23 +437,30 @@ function sendMessage(id) {
 }
 
 socket.on("message", e => {
+    // TAKE THE DATA FROM THIS USER
     var id = e.id
     var username = e.username
     var message = [e.message, strTime(), true]
 
-    if (id in xu.messages) {
-        xu.messages[id].messages.push(message)
-        xu.messages[id].username = username
+    if (xu.bans.includes(id) || xu.requests.includes(id)) {
+        // USER BLOCK THIS USER OR ALERDAY ASK
+        return false
     } else {
-        xu.messages[id] = {
-            username: username,
-            messages: [message]
+        if (id in xu.messages) {
+            xu.messages[id].messages.push(message)
+            xu.messages[id].username = username
+        } else {
+            // NEW MESSAGE FROM THIS USER ~ CREATE NEW FOLDER
+            xu.messages[id] = {
+                username: username,
+                messages: [message]
+            }
         }
-    }
 
-    // push message to container
-    if (xu.currentId === e.id && xu.chattingRoom === true) {
-        mes(message, true)
+        // push message to container
+        if (xu.currentId === id && xu.chattingRoom === true) {
+            mes(message, true)
+        }
     }
 })
 
@@ -540,11 +554,12 @@ function messageRequests() {
 
 
 function randomlySingle() {
-    socket.emit("randomly", true)
+    var rud = xu.bans.concat(xu.friends, xu.requests)
+    socket.emit("randomly", { s: true, rud: rud })
 }
 
 function exitRandomly() {
-    socket.emit("randomly", false)
+    socket.emit("randomly", { s: false, rud: [] })
     xu.randomlySingle = false
     searching()
 }
@@ -1094,7 +1109,7 @@ socket.on("randomly-res", e => {
 })
 
 function randomlyStop(e) {
-    socket.emit("randomly", false)
+    socket.emit("randomly", { s: false, rud: [] })
     xu.randomlySingle = false
     if (e === true) {
         searching()
