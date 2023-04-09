@@ -285,7 +285,9 @@ var backArrow = (back, id) => {
         return `<div class="backArrow" onclick="searching()"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>`
     } else if (back === "h") {
         return `<div class="backArrow" onclick="chattingRoom('messages','${id}')"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>`
-    } else {
+    } else if(back === "messageRequests"){
+        return `<div class="backArrow" onclick="messageRequests()"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>`
+    } else if (back === "messages"){
         return `<div class="backArrow" onclick="messages()"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>`
     }
 }
@@ -374,7 +376,7 @@ socket.on("userInfo", e => {
             
             <div class="options">
                 <div class="user_options" onclick="userOptions('${id}', true)"> More </div>
-                <div class="sendMessage_option" onclick="chattingRoom(false,'${id}')"> Write a message </div>
+                <div class="sendMessage_option" onclick="chattingRoom('${back}','${id}')"> Write a message </div>
             </div>
 
             <div id="userState"></div>
@@ -406,7 +408,7 @@ function messages() {
 
                     var id = key
 
-                    nm = nm.concat(`<div class="alian" onclick="chattingRoom('h','${id}')">
+                    nm = nm.concat(`<div class="alian" onclick="chattingRoom('messages','${id}')">
                     <h3>${username}</h3><div><p> ${lastMessage} </p> <p> ${lastMessage_date} </p></div> </div>`)
                 }
             }
@@ -547,7 +549,7 @@ function messageRequests() {
 
                     var id = key
 
-                    nm = nm.concat(`<div class="alian" onclick="chattingRoom('h','${id}')">
+                    nm = nm.concat(`<div class="alian" onclick="chattingRoom('messageRequests','${id}')">
                     <h3>${username}</h3><div><p> ${lastMessage} </p> <p> ${lastMessage_date} </p></div> </div>`)
                 }
             }
