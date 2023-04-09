@@ -149,8 +149,6 @@
 
 #chat {
     color: aliceblue;
-    /* 457cd6 */
-    margin-top: 10px;
 }
 
 .main_slider {
@@ -350,25 +348,26 @@
     width: 90%;
     max-width: 900px;
     margin: auto;
-    margin-top: 20px;
+    margin-top: 13px;
 }
 
 .search_section {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     display: flex;
     overflow: hidden;
-    border: 2px solid #171d25;
-    border-radius: 9px;
+    border: 1px solid #171d25;
+    border-radius: 4px;
     height: fit-content;
 }
 
 #search {
     width: 100%;
-    background-color: #161b22;
+    background-color: #12161c00;
     outline: 0;
     border: 0;
     color: aliceblue;
     font-size: 16px;
+    font-family: 'Righteous', cursive;
 }
 
 input[type="search"]::-webkit-search-decoration,
@@ -383,8 +382,9 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .inputSearch {
-    background-color: #161b22;
-    padding: 13px;
+    background-color: #12161c;
+    outline: 0;
+    padding: 15px;
     width: 100%;
 }
 
@@ -395,15 +395,15 @@ input[type="search"]::-webkit-search-cancel-button {
 #search_buttom {
     width: 80px;
     text-align: center;
-    background-color: #161b22;
+    background-color: #12161c;
+    outline: 0;
     cursor: pointer;
 }
 
 #search_buttom img {
-    padding: 13px;
+    padding: 15px;
     width: 16px;
     margin-top: 1px;
-    filter: invert(92%) sepia(1%) saturate(72%) hue-rotate(314deg) brightness(91%) contrast(89%);
 }
 
 #search_buttom:hover {
@@ -411,7 +411,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 #reandomly_search {
-    padding: 8px;
+    padding: 5px;
     background-color: #06283D;
     background: linear-gradient(270deg, #06283D, #1363DF, #1363DF);
     background-size: auto;
@@ -436,7 +436,6 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .space_container h2 {
-    margin-top: 30px;
     padding: 5px 5px 23px 5px;
     font-size: 23px;
     border: 0;
@@ -446,7 +445,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .backArrow {
     width: 90%;
     border-radius: 2px;
-    margin: 15px auto 10px auto;
+    margin: 10px auto 10px auto;
     background-color: #161b22;
     border: 0;
     border-left: 4px solid #457cd6;
@@ -948,7 +947,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .randomly_info {
     background-color: #457cd6;
     background: linear-gradient(-45deg, #528be8, #5fd6f7, #0095ff, #2192FF);
-    padding: 10px;
+    padding: 3px;
     font-size: 17px;
     background-size: 400% 400%;
     animation: gradient 15s ease infinite;

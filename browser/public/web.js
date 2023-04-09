@@ -212,7 +212,7 @@ function searching() {
         <div class="space_container">
             <div class="search_section">
                 <div id="search_buttom" onclick="searchId(true,'','searchSection')"> <img src="/icons/magnifying-glass-solid.svg"> </div>
-                <div class="inputSearch"> <input type="search" id="search" placeholder="Search for someone by Id .." ></div>
+                <div class="inputSearch"> <input type="search" id="search" placeholder="Search for someone by ID" ></div>
             </div>
             <div id="reandomly_search" onclick="randomlySingle()"> <div id="stars"></div> <h3>Enter in space!</h3> <p>Search for randomly person.</p> </div>
 
@@ -1121,7 +1121,7 @@ socket.on("randomly-res", e => {
         <div class="randomly">
         <div class="randomly_container">
             <div class="randomly_title"> Searching .. </div>
-            <div class="randomly_info"> Please wait while we connect you, this will not take long </div>
+            <div class="randomly_info"></div>
         </div>
         <div class="randomly_end" onclick="randomlyStop(true)"> cancel </div>
         </div>
