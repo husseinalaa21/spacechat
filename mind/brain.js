@@ -192,7 +192,7 @@ function socket(io) {
             }
 
             // SEND THE INFORMATION
-            socket.emit("userInfo", { id: e.id, username: username })
+            socket.emit("userInfo", { id: e.id, username: username , back : e.back})
         })
 
         // SEND MESSAGE ->
@@ -261,7 +261,7 @@ function socket(io) {
                         singleTree(myId, false)
                         singleTree(a, false)
                         x[a].online = myId
-                        x[myId].online = myId
+                        x[myId].online = a
                         x[myId].rud = []
                         x[a].rud = []
                         io.to(x[a].socketId).emit("randomly-ok", { id: myId, username: x[myId].username })

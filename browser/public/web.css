@@ -877,6 +877,26 @@ input[type="search"]::-webkit-search-cancel-button {
     background-color: rgb(142, 42, 42);
 }
 
+.randomlyOptions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: auto;
+    font-family: 'Righteous', cursive;
+}
+
+.rest_randmly {
+    width: 40%;
+    text-align: center;
+    background-color: #31353a;
+    border-radius: 2px;
+    margin: 15px auto 10px 14px;
+    padding: 13px 10px 13px 16px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
 .monitor {
     position: absolute;
 }

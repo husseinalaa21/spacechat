@@ -31,7 +31,9 @@ const xu = {
     // SYSTEM DATA
     currentId: "",
     chattingRoom: false,
-    onlineId: ""
+    onlineId: "",
+    // FIXABLE SYSYTEM DATA
+    back: ""
 }
 
 function xGet(cname) {
@@ -168,45 +170,6 @@ function container_react(con) {
     xu.chattingRoom = false
 }
 
-function messages() {
-    var friends_messages = () => {
-        var m = `<div class="noMessages"> <div class="noMessagesTitle">  Welcome to your inbox!  </div> <div class="noMessagesSubTitle"> Here you will find new messages from your friends only. </div></div>`
-        var nm = ``
-
-        if (Object.keys(xu.messages).length > 0) {
-            for (const [key, value] of Object.entries(xu.messages)) {
-                if (xu.friends.includes(key)) {
-                    // ADD AS FRIEND
-                    var username = xu.messages[key].username
-                    var lastMessage = "Tap to start chating"
-                    var lastMessage_date = ""
-                    if (xu.messages[key].messages.length > 0) {
-                        lastMessage = xu.messages[key].messages[xu.messages[key].messages.length - 1][0]
-                        if (lastMessage.length > 20) {
-                            lastMessage = lastMessage.substring(0, 20) + ".. "
-                        }
-                        lastMessage_date = xu.messages[key].messages[xu.messages[key].messages.length - 1][1]
-                    }
-
-                    var id = key
-
-                    nm = nm.concat(`<div class="alian" onclick="chattingRoom('h','${id}')">
-                    <h3>${username}</h3><div><p> ${lastMessage} </p> <p> ${lastMessage_date} </p></div> </div>`)
-                }
-            }
-        }
-
-        if (nm.length > 0) {
-            m = nm
-        }
-
-        return m
-    }
-
-    var con = `<div id="new_messages" onclick="messageRequests()"> <div class="message_requests"> <img src="/icons/envelope-solid.svg" /> </div> <div class="message_requests_title"> Message requests </div> </div> <div class="messsages"> ${friends_messages()} </div>`
-    container_react(con)
-}
-
 function you() {
     var username = xu.username
     var id = xu.id
@@ -248,7 +211,7 @@ function searching() {
         var con = `
         <div class="space_container">
             <div class="search_section">
-                <div id="search_buttom" onclick="searchId(true)"> <img src="/icons/magnifying-glass-solid.svg"> </div>
+                <div id="search_buttom" onclick="searchId(true,'','searchSection')"> <img src="/icons/magnifying-glass-solid.svg"> </div>
                 <div class="inputSearch"> <input type="search" id="search" placeholder="Search for someone by Id .." ></div>
             </div>
             <div id="reandomly_search" onclick="randomlySingle()"> <div id="stars"></div> <h3>Enter in space!</h3> <p>Search for randomly person.</p> </div>
@@ -261,59 +224,6 @@ function searching() {
         container_react(con)
     }
 }
-
-function searchId(s, t) {
-    var val = ""
-    // TAKE IT FROM SOURCE OR FUNCTION
-    if (s === true) {
-        val = document.getElementById("search").value
-    } else {
-        val = t
-    }
-    // AFTER GET THE THE ID .. SEARCH
-    socket.emit("searchId", { id: val })
-}
-
-socket.on("userInfo", e => {
-    var username = e.username
-    var id = e.id
-    var pic = "/icons/ghost-solid.svg"
-    var bio = "Here is the bio!"
-
-    // ADD IN HISTORY IF WAS NEW
-    if (id in xu.messages === false) {
-        xu.messages[id] = {
-            "username": username,
-            "messages": []
-        }
-    }
-
-    var con = `
-    <div class="backArrow" onclick="searching()"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>
-
-    <div class="searchResult">
-
-        <div class="result">
-            <div class="result_info">
-                <div class="result_pic">
-                    <img src="${pic}" width="20px">
-                </div>
-                
-                <div class="result_title"> <h1>${username}</h1><p><mark>#</mark>${id}</p> </div>
-            </div>
-            <div class="result_bio">${bio}</div>
-            
-            <div class="options">
-                <div class="user_options" onclick="userOptions('${id}', true)"> More </div>
-                <div class="sendMessage_option" onclick="chattingRoom(false,'${id}')"> Write a message </div>
-            </div>
-
-            <div id="userState"></div>
-
-        </div>
-    </div>`
-    container_react(con)
-})
 
 var userOptions_glich = false
 function userOptions(id, s) {
@@ -362,21 +272,27 @@ function handling_user(state, id) {
     userOptions(id, false)
 }
 
+var backArrow = (back, id) => {
+    if (back === true) {
+        return `<div class="backArrow" onclick="messageRequests()"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>`
+    } else if (back === false) {
+        return `<div class="backArrow" onclick="searchId(false, '${id}')"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>`
+    } else if (back === "exitRandomly") {
+        return `<div class="randomlyOptions"><div class="backArrow" onclick="exitRandomly()"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>  <div class="rest_randmly" onclick="research()"> Research </div></div>`
+    } else if (back === "exitRandomlyPlus") {
+        return `<div class="randomlyOptions"><div class="backArrow" onclick="chattingRoom('exitRandomly','${id}')"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>  <div class="rest_randmly" onclick="research()"> Research </div></div>`
+    } else if (back === "searchSection") {
+        return `<div class="backArrow" onclick="searching()"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>`
+    } else if (back === "h") {
+        return `<div class="backArrow" onclick="chattingRoom('messages','${id}')"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>`
+    } else {
+        return `<div class="backArrow" onclick="messages()"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>`
+    }
+}
+
 function chattingRoom(back, id) {
     var username = xu.messages[id].username
     var messages = xu.messages[id].messages
-
-    var backArrow = () => {
-        if (back === true) {
-            return `onclick="messageRequests()"`
-        } else if (back === false) {
-            return `onclick="searchId(false, '${id}')"`
-        } else if (back === "exitRandomly") {
-            return `onclick="exitRandomly()"`
-        } else {
-            return `onclick="messages()"`
-        }
-    }
 
     var messages_container = () => {
         if (messages.length > 0) {
@@ -391,9 +307,9 @@ function chattingRoom(back, id) {
     }
 
     var con = `
-    <div class="backArrow"  ${backArrow()}> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>
+    ${backArrow(back, id)}
     <div class="chatting">
-        <div class="chatting_top" onclick="searchId(false,'${id}')"> <h3>${username}</h3> <p> Tap here for more options </p> </div>
+        <div class="chatting_top" onclick="searchId(false,'${id}','${back}')"> <h3>${username}</h3> <p> Tap here for more options </p> </div>
         <div class="chat_box" id="chatting_container" onscroll="scrollChattingBox()">
             <div class="chatting_container_box" id="chatting_container_box">
                 <p class="chatting_alert"> <img src="/icons/lock-solid.svg" width="11px"> &nbsp; This chat is front-front encrypted. </p>
@@ -408,6 +324,105 @@ function chattingRoom(back, id) {
     xu.currentId = id
     xu.chattingRoom = true
 }
+
+
+function searchId(s, t, back) {
+    var val = ""
+    // TAKE IT FROM SOURCE OR FUNCTION
+    if (s === true) {
+        val = document.getElementById("search").value
+    } else {
+        val = t
+    }
+    // AFTER GET THE THE ID .. SEARCH
+    socket.emit("searchId", { id: val, back: back })
+}
+
+socket.on("userInfo", e => {
+    var username = e.username
+    var id = e.id
+    var pic = "/icons/ghost-solid.svg"
+    var bio = "Here is the bio!"
+    var back = e.back
+
+    // ADD IN HISTORY IF WAS NEW
+    if (id in xu.messages === false) {
+        xu.messages[id] = {
+            "username": username,
+            "messages": []
+        }
+    }
+
+    if(back === "exitRandomly"){
+        back = "exitRandomlyPlus"
+    }
+
+    var con = `
+    ${backArrow(back, id)}
+
+    <div class="searchResult">
+
+        <div class="result">
+            <div class="result_info">
+                <div class="result_pic">
+                    <img src="${pic}" width="20px">
+                </div>
+                
+                <div class="result_title"> <h1>${username}</h1><p><mark>#</mark>${id}</p> </div>
+            </div>
+            <div class="result_bio">${bio}</div>
+            
+            <div class="options">
+                <div class="user_options" onclick="userOptions('${id}', true)"> More </div>
+                <div class="sendMessage_option" onclick="chattingRoom(false,'${id}')"> Write a message </div>
+            </div>
+
+            <div id="userState"></div>
+
+        </div>
+    </div>`
+    container_react(con)
+})
+
+function messages() {
+    var friends_messages = () => {
+        var m = `<div class="noMessages"> <div class="noMessagesTitle">  Welcome to your inbox!  </div> <div class="noMessagesSubTitle"> Here you will find new messages from your friends only. </div></div>`
+        var nm = ``
+
+        if (Object.keys(xu.messages).length > 0) {
+            for (const [key, value] of Object.entries(xu.messages)) {
+                if (xu.friends.includes(key)) {
+                    // ADD AS FRIEND
+                    var username = xu.messages[key].username
+                    var lastMessage = "Tap to start chating"
+                    var lastMessage_date = ""
+                    if (xu.messages[key].messages.length > 0) {
+                        lastMessage = xu.messages[key].messages[xu.messages[key].messages.length - 1][0]
+                        if (lastMessage.length > 20) {
+                            lastMessage = lastMessage.substring(0, 20) + ".. "
+                        }
+                        lastMessage_date = xu.messages[key].messages[xu.messages[key].messages.length - 1][1]
+                    }
+
+                    var id = key
+
+                    nm = nm.concat(`<div class="alian" onclick="chattingRoom('h','${id}')">
+                    <h3>${username}</h3><div><p> ${lastMessage} </p> <p> ${lastMessage_date} </p></div> </div>`)
+                }
+            }
+        }
+
+        if (nm.length > 0) {
+            m = nm
+        }
+
+        return m
+    }
+
+    var con = `<div id="new_messages" onclick="messageRequests()"> <div class="message_requests"> <img src="/icons/envelope-solid.svg" /> </div> <div class="message_requests_title"> Message requests </div> </div> <div class="messsages"> ${friends_messages()} </div>`
+    container_react(con)
+}
+
 
 function strTime() {
     var date = new Date()
@@ -562,6 +577,11 @@ function exitRandomly() {
     socket.emit("randomly", { s: false, rud: [] })
     xu.randomlySingle = false
     searching()
+}
+
+function research() {
+    var rud = xu.bans.concat(xu.friends, xu.requests)
+    socket.emit("randomly", { s: true, rud: rud })
 }
 
 socket.on("randomly-res", e => {
