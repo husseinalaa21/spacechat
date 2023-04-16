@@ -49,10 +49,29 @@
 }
 
 .enter_space {
-    margin: 50px auto 50px auto;
+    margin: 50px auto 10px auto;
     width: 100%;
 }
 
+.enter_form {
+    margin-bottom: 40px;
+}
+
+.enter_note {
+    padding: 15px;
+    background-color: #043d669f;
+    border-radius: 6px 6px 6px 6px;
+    font-size: 15px;
+    font-family: 'Righteous', cursive;
+}
+.arrow-up {
+    width: 0; 
+    height: 0; 
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 12px solid #043d669f;
+    margin-left: 20px;
+  }
 .webEnter {
     font-family: 'Righteous', cursive;
     padding: 10px;
