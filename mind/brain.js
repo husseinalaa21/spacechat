@@ -109,11 +109,18 @@ function socket(io) {
                 return false
             }
 
-            // SEND THE MESSAGE TO THIS USER ..
-            io.to(x[id[1]].socketId).emit('message', { message: e.message, id: userdata.id, username: userdata.username })
+            if (x[id[1]].alian === true) {
+                // SEND THE MESSAGE TO ALIAN ..
+                callAlian(id[1], e.message)
+            } else {
+                // SEND THE MESSAGE TO THIS USER ..
+                io.to(x[id[1]].socketId).emit('message', { message: e.message, id: userdata.id, username: userdata.username })
+            }
         })
 
         // ENTER RANDOMLY SPACE ..
+        var wait_before, wait_alian;
+
         socket.on("randomly", e => {
             var myId = userdata.id
             // RANDOMLY DATA **** LARG DATA MOST BE DELETED AFTER CONNECTED **** RANDOMLY USERS DATA (rud)
@@ -128,6 +135,10 @@ function socket(io) {
                 return false
             }
 
+            // CLEAR WAIT TIME
+            clearTimeout(wait_before)
+            clearTimeout(wait_alian)
+
             if (e.s === true) {
                 x[myId].randomlySingle = true
                 x[myId].online = ""
@@ -135,7 +146,9 @@ function socket(io) {
                 // SEND RES ..
                 socket.emit("randomly-res", { state: x[myId].randomlySingle })
                 // RUN SEARCHING METHOD ..
-                searchRandomly()
+                wait_before = setTimeout(() => {
+                    searchRandomly()
+                }, 1000);
             } else {
                 x[myId].randomlySingle = false
                 x[myId].online = ""
@@ -190,7 +203,7 @@ function socket(io) {
                     xSingle.push(id)
                 }
                 // SET TIME IF WAITING MORE THEN 10 SEC .. CALL ALIAN ..
-                setTimeout(() => {
+                wait_alian = setTimeout(() => {
                     var myId = userdata.id
                     // CHECK USER ID
                     if (idCheck(myId)[0] === false || userdata.connected === false) {
@@ -199,7 +212,7 @@ function socket(io) {
                     }
 
                     if (x[myId].randomlySingle === true) {
-                        callAlian(myId)
+                        makeAlian(myId)
                     }
                 }, 2000);
             } else {
@@ -213,17 +226,21 @@ function socket(io) {
             }
         }
 
-        function callAlian(myId) {
+        function makeAlian(myId) {
             singleTree(myId, false)
             x[myId].randomlySingle = false
             // GENERET ALIAN ..
-            var alian_data = alian.gen_alian()
+            var alian_data = alian.make_alian()
             var new_dna = dna.id(alian_data.username, alian_data.password, alian_data.pincode)
             x[new_dna.id] = {
                 // USER DATA
                 "socketId": "",
                 "username": new_dna.username,
+                // DATA FOR ALIAN
                 "alian": true,
+                "messages": {},
+                "name": alian_data.firstname,
+                "gender": alian_data.gender,
 
                 // SECURITY DATA
                 "connected": true,
@@ -234,14 +251,32 @@ function socket(io) {
             x[myId].rud = []
             x_alians.push(new_dna.id)
             socket.emit("randomly-ok", { id: new_dna.id, username: new_dna.username })
-
+            callAlian(new_dna.id, "")
             // DELETE ALIAN UP 500 ALIANS
-            if (x_alians.length > 500){
+            if (x_alians.length > 500) {
                 delete x[x_alians[0]]
                 x_alians.shift();
             }
         }
 
+        function callAlian(id, ask) {
+            var myId = userdata.id
+            // CHECK USER ID
+            if (idCheck(myId)[0] === false || userdata.connected === false) {
+                socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
+                return false
+            }
+
+            if (id in x) {
+                var res = alian.call_alian(x[id], myId, userdata.username, ask)
+                if (res.length > "") {
+                    var timeWait = Number(`${res.length}00`)
+                    setTimeout(() => {
+                        socket.emit("message", { message: res, id: id, username: x[id].username })
+                    }, timeWait);
+                }
+            }
+        }
 
 
         // WHEN USER DISCONNECTED

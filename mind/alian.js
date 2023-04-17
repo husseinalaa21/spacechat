@@ -2,18 +2,59 @@
 // b  : ANSWEAR
 // c : IS IT OKAY TO RE-ASK ?
 
-function alian(name, gender) {
+function call_alian(data, userid, username, ask) {
+    // GET DATA FROM ALIAN
+    var myName = data.name
+    var myGender = data.gender
+    var myMessages = data.messages
 
     const words = [
-        { a: ["Hi", "Hello", "hi", "hello", "hii", "what's up"], b: words.a, c: true },
-        { a: ["How are you", "what's up", "how are u", "how r u", "How about you"], b: ["good", "Good", "fine", "Fine", "Great", "doing good", "okay"], c: true },
-        { a: ["what is your name", "what is you name", "whats your name", "what your name", "what's your name", "your name", "your name"], b: alian_name }
+        { a: ["Hi", "Hello", "hi", "hello", "hii", "what's up", "Hello", "hi", "Hi", "Hii"], b: true, c: false },
+        { a: ["How are you", "how are you", "How are you ?", "How are you?", "how are you?", "how are you ?", "what's up", "how are u", "how r u", "How about you"], b: ["good", "Good", "fine", "Fine", "Great", "doing good", "okay"], c: true },
+        { a: ["what is your name", "what is you name", "whats your name", "what your name", "what's your name", "your name", "your name"], b: [`${myName}`, ``] }
     ]
 
+    // FIRST MESSAGE
+    if (ask.length > 0) {
+        var answear = ""
+        for (var w = 0; w < words.length; w++) {
+            // LOOP A THE ASK 
+            for (var a = 0; a < words[w].a.length; a++) {
+                if (words[w].a[a].includes(ask)) {
+                    // ANSWEAR FROM ~B
+                    if (words[w].b === true) {
+                        answear = words[w].a[Math.floor(Math.random() * words[w].a.length)]
+                    } else {
+                        answear = words[w].b[Math.floor(Math.random() * words[w].b.length)]
+                    }
+                    break;
+                }
+            }
+            // LOOP B THE ANSWEARS 
+            if (Array.isArray(words[w].b)) {
+                for (var b = 0; b < words[w].b.length; b++) {
+                    if (words[w].b[b].includes(ask)) {
+                        break;
+                    }
+                }
+            } else if (words[w].b === true) {
+                words[w].a[Math.floor(Math.random() * words[w].a.length)]
+            }
+        }
+        return answear
+    } else {
+        var message = ""
+        if (!(userid in myMessages)) {
+            if (Math.floor(Math.random() * 3) === 0) {
+                message = words[0].a[Math.floor(Math.random() * words[0].a.length)]
+            }
+        }
+        return message
+    }
 }
 
 
-function gen_alian() {
+function make_alian() {
     // 0 MALES
     // 1 MALES
 
@@ -2023,25 +2064,136 @@ function gen_alian() {
             "sandra",
             "soleil",
             "annabella"
+        ],
+        [
+            "smith",
+            "johnson",
+            "williams",
+            "jones",
+            "brown",
+            "davis",
+            "miller",
+            "wilson",
+            "moore",
+            "taylor",
+            "anderson",
+            "thomas",
+            "jackson",
+            "white",
+            "harris",
+            "martin",
+            "thompson",
+            "garcia",
+            "martinez",
+            "robinson",
+            "clark",
+            "rodriguez",
+            "lewis",
+            "lee",
+            "walker",
+            "hall",
+            "allen",
+            "young",
+            "hernandez",
+            "king",
+            "wright",
+            "lopez",
+            "hill",
+            "scott",
+            "green",
+            "adams",
+            "baker",
+            "gonzalez",
+            "nelson",
+            "carter",
+            "mitchell",
+            "perez",
+            "roberts",
+            "turner",
+            "phillips",
+            "",
+            "campbell",
+            "parker",
+            "evans",
+            "edwards",
+            "collins",
+            "stewart",
+            "sanchez",
+            "morris",
+            "rogers",
+            "reed",
+            "cook",
+            "morgan",
+            "bell",
+            "murphy",
+            "bailey",
+            "rivera",
+            "cooper",
+            "richardson",
+            "cox",
+            "howard",
+            "ward",
+            "torres",
+            "peterson",
+            "gray",
+            "ramirez",
+            "james",
+            "watson",
+            "brooks",
+            "kelly",
+            "sanders",
+            "price",
+            "bennett",
+            "wood",
+            "barnes",
+            "ross",
+            "henderson",
+            "coleman",
+            "jenkins",
+            "perry",
+            "powell",
+            "long",
+            "patterson",
+            "hughes",
+            "flores",
+            "washington",
+            "butler",
+            "simmons",
+            "foster",
+            "gonzales",
+            "bryant",
+            "alexander",
+            "russell",
+            "griffin",
+            "diaz",
+            "hayes"
+        ],
+        [
+            "_",
+            "",
+            "_"
         ]
     ]
 
     var gender = Math.floor(Math.random() * 2)
     var lastname = ""
-    if (Math.floor(Math.random() * 2) === 1) {
-        lastname = alians[0][Math.floor(Math.random() * alians[0].length)]
+    var b_lastname = ""
+    var lastname_option = Math.floor(Math.random() * 2)
+    if (lastname_option === 1) {
+        lastname = alians[2][Math.floor(Math.random() * alians[2].length)]
+        b_lastname = alians[3][Math.floor(Math.random() * alians[3].length)]
     }
     var firstname = alians[gender][Math.floor(Math.random() * alians[gender].length)]
-    var username = firstname + lastname
+    var username = firstname + b_lastname + lastname
     var password = username + Math.floor(1000 + Math.random() * 9000);
     var pincode = Math.floor(1000 + Math.random() * 9000);
 
-    return { username, password, pincode, gender }
+    return { username, password, pincode, gender, firstname: firstname }
 }
 
 
 
 module.exports = {
-    alian,
-    gen_alian
+    call_alian,
+    make_alian
 }
