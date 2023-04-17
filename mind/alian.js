@@ -11,7 +11,7 @@ function call_alian(data, userid, username, ask) {
     const words = [
         { a: ["Hi", "Hello", "hi", "hello", "hii", "what's up", "Hello", "hi", "Hi", "Hii"], b: true, c: false },
         { a: ["How are you", "how are you", "How are you ?", "How are you?", "how are you?", "how are you ?", "what's up", "how are u", "how r u", "How about you"], b: ["good", "Good", "fine", "Fine", "Great", "doing good", "okay"], c: true },
-        { a: ["what is your name", "what is you name", "whats your name", "what your name", "what's your name", "your name", "your name"], b: [`${myName}`, ``] }
+        { a: ["what is your name", "what is you name", "whats your name", "what your name", "what's your name", "your name", "your name"], b: [`${myName}`] }
     ]
 
     // FIRST MESSAGE
@@ -20,7 +20,7 @@ function call_alian(data, userid, username, ask) {
         for (var w = 0; w < words.length; w++) {
             // LOOP A THE ASK 
             for (var a = 0; a < words[w].a.length; a++) {
-                if (words[w].a[a].includes(ask)) {
+                if (words[w].a[a].includes(ask) || ask.includes(words[w].a[a])) {
                     // ANSWEAR FROM ~B
                     if (words[w].b === true) {
                         answear = words[w].a[Math.floor(Math.random() * words[w].a.length)]
@@ -31,14 +31,17 @@ function call_alian(data, userid, username, ask) {
                 }
             }
             // LOOP B THE ANSWEARS 
-            if (Array.isArray(words[w].b)) {
-                for (var b = 0; b < words[w].b.length; b++) {
-                    if (words[w].b[b].includes(ask)) {
-                        break;
+            if (answear === "") {
+                if (Array.isArray(words[w].b)) {
+                    for (var b = 0; b < words[w].b.length; b++) {
+                        if (words[w].b[b].includes(ask)) {
+                            break;
+                        }
                     }
+                } else if (words[w].b === true) {
+                    words[w].a[Math.floor(Math.random() * words[w].a.length)]
                 }
-            } else if (words[w].b === true) {
-                words[w].a[Math.floor(Math.random() * words[w].a.length)]
+
             }
         }
         return answear
