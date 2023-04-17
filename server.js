@@ -14,6 +14,15 @@ const brain = require('./mind/brain')
 brain.socket(io)
 
 
+// OLD DOMAIN REDIRECT ~
+app.use((req, res, next) => {
+    var host = req.get('Host');
+    if (host === 'thespacechat.com') {
+        return res.redirect(301, 'spacechat.app/' + req.originalUrl);
+    }
+    return next();
+});
+
 // BROWSER APIs ->
 app.set('views', './browser/view')
 app.set('view engine', 'ejs')
