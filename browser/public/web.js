@@ -285,10 +285,27 @@ var backArrow = (back, id) => {
         return `<div class="backArrow" onclick="searching()"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>`
     } else if (back === "h") {
         return `<div class="backArrow" onclick="chattingRoom('messages','${id}')"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>`
-    } else if(back === "messageRequests"){
+    } else if (back === "messageRequests") {
         return `<div class="backArrow" onclick="messageRequests()"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>`
-    } else if (back === "messages"){
+    } else if (back === "messages") {
         return `<div class="backArrow" onclick="messages()"> <img src="/icons/chevron-left-solid.svg" width="15px"> </div>`
+    }
+}
+
+// USER UPDATE ..
+function user_update(id, username, message) {
+    if (id in xu.messages) {
+        // ~ UPDATE THIS FOLDER
+        if (message.length > 0) {
+            xu.messages[id].messages.push(message)
+        }
+        xu.messages[id].username = username
+    } else {
+        // ~ CREATE NEW FOLDER
+        xu.messages[id] = {
+            username: username,
+            messages: message.length > 0 ? [message] : []
+        }
     }
 }
 
@@ -317,9 +334,10 @@ function chattingRoom(back, id) {
                 <p class="chatting_alert"> <img src="/icons/lock-solid.svg" width="11px"> &nbsp; This chat is front-front encrypted. </p>
                 ${messages_container()}
             </div>
+            <div id="typing_on"></div>
             <div id="new_message_note"></div>
         </div>
-        <div class="chatting_bottom"> <div class="chatting_bottom_sec"> <div class="message_input"> <input type="text" id="message_input" placeholder="Type a message"> </div> <div class="sendMessage" onclick="sendMessage('${id}')"> <img src="/icons/paper-plane-solid.svg" width="23px"> </div> </div> </div>
+        <div class="chatting_bottom"> <div class="chatting_bottom_sec"> <div class="message_input"> <input type="text" id="message_input" placeholder="Type a message" autocomplete="off"  oninput="sty()"> </div> <div class="sendMessage" onclick="sendMessage()"> <img src="/icons/paper-plane-solid.svg" class="send_message_button" width="23px" id="send_message_button"> </div> </div> </div>
     </div>
     `
     container_react(con)
@@ -347,15 +365,10 @@ socket.on("userInfo", e => {
     var bio = "Here is the bio!"
     var back = e.back
 
-    // ADD IN HISTORY IF WAS NEW
-    if (id in xu.messages === false) {
-        xu.messages[id] = {
-            "username": username,
-            "messages": []
-        }
-    }
+    // UPDATE USER
+    user_update(id, username, "")
 
-    if(back === "exitRandomly"){
+    if (back === "exitRandomly") {
         back = "exitRandomlyPlus"
     }
 
@@ -437,7 +450,8 @@ function strTime() {
     return hours + ':' + minutes + ' ' + ampm;
 }
 
-function sendMessage(id) {
+function sendMessage() {
+    var id = xu.currentId
     var mm = document.getElementById("message_input").value
     if (mm.length > 0) {
         socket.emit("sendMessage", {
@@ -450,33 +464,77 @@ function sendMessage(id) {
 
         mes([mm, strTime()], false)
         document.getElementById("message_input").value = ""
+        document.getElementById("send_message_button").className = "send_message_button"
     }
 }
 
+var typ = false;
+function sty() {
+    var id = xu.currentId
+    if (typ === false) {
+        typ = true;
+        socket.emit('typing', { c: true, id: id });
+        setTimeout(() => {
+            socket.emit("typing", { c: false, id: id });
+            document.getElementById("send_message_button").className = "send_message_button"
+            setTimeout(() => {
+                typ = false;
+            }, 500);
+        }, 2000);
+        document.getElementById("send_message_button").className = "send_message_button_true"
+    } else {
+        return false
+    }
+}
+
+socket.on("typing_on", e => {
+    var chattingContainer = document.getElementById("chatting_container")
+    // TAKE THE DATA FROM THIS USER
+    var id = e.id
+    var event = e.c
+
+    if (xu.bans.includes(id)) {
+        // USER BLOCK THIS USER
+        return false
+    } else {
+        if (xu.currentId === id && xu.chattingRoom === true) {
+            if (event === true) {
+                document.getElementById("typing_on").innerHTML = `<p class="typing"> ... </p>`
+            } else {
+                document.getElementById("typing_on").innerHTML = ``
+            }
+        }
+    }
+
+    if (scrollHeight === true) {
+        chattingContainer.scrollTo(0, chattingContainer.scrollHeight);
+    }
+
+
+    heighNow = chattingContainer.scrollHeight + chattingContainer.scrollTop
+    heighChange = chattingContainer.scrollHeight + chattingContainer.scrollTop
+})
+
 socket.on("message", e => {
+    document.getElementById("typing_on").innerHTML = ``
     // TAKE THE DATA FROM THIS USER
     var id = e.id
     var username = e.username
     var message = [e.message, strTime(), true]
 
-    if (xu.bans.includes(id) || xu.requests.includes(id)) {
+    if (xu.bans.includes(id)) {
         // USER BLOCK THIS USER OR ALERDAY ASK
         return false
     } else {
-        if (id in xu.messages) {
-            xu.messages[id].messages.push(message)
-            xu.messages[id].username = username
-        } else {
-            // NEW MESSAGE FROM THIS USER ~ CREATE NEW FOLDER
-            xu.messages[id] = {
-                username: username,
-                messages: [message]
-            }
-        }
-
         // push message to container
         if (xu.currentId === id && xu.chattingRoom === true) {
+            user_update(id, username, message)
             mes(message, true)
+        } else if (xu.requests.includes(id)) {
+            // DO NOTHING ABOUT IT 
+        } else {
+            // FRIEND OR NEW USER
+            user_update(id, username, message)
         }
     }
 })
@@ -1145,13 +1203,8 @@ socket.on("randomly-ok", e => {
     if (xu.randomlySingle === true) {
         var id = e.id
         var username = e.username
-        // ADD IN HISTORY IF WAS NEW
-        if (id in xu.messages === false) {
-            xu.messages[id] = {
-                "username": username,
-                "messages": []
-            }
-        }
+
+        user_update(id, username, "")
 
         xu.onlineId = id
         chattingRoom("exitRandomly", id)

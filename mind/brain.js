@@ -118,6 +118,24 @@ function socket(io) {
             }
         })
 
+        socket.on("typing", e => {
+            // CHECK IF THIS IS USER IN X ~ IF NOT JUST IGNORE THE ORDER
+            var id = idCheck(e.id)
+            if (id[0] === false || idCheck(userdata.id)[0] === false) {
+                return false
+            }
+
+            if (userdata.connected === false) {
+                socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
+                return false
+            }
+
+            if (x[id[1]].alian === false) {
+                // SEND THE EVENT TO THIS USER ..
+                io.to(x[id[1]].socketId).emit('typing_on', { c: e.c, id: userdata.id })
+            }
+        })
+
         // ENTER RANDOMLY SPACE ..
         var wait_before, wait_alian;
 

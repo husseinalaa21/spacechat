@@ -669,8 +669,23 @@ input[type="search"]::-webkit-search-cancel-button {
     cursor: pointer;
 }
 
-.sendMessage img {
+.send_message_button {
+    transition: 0.4s;
     filter: invert(99%) sepia(30%) saturate(436%) hue-rotate(168deg) brightness(100%) contrast(91%);
+}
+
+.send_message_button_true {
+    transition: 0.4s;
+    filter: invert(66%) sepia(82%) saturate(462%) hue-rotate(186deg) brightness(101%) contrast(101%);
+}
+
+.typing {
+    padding: 10px 20px 10px 20px;
+    border-radius: 0 6px 6px 6px;
+    background-color: #151a21;
+    color: whitesmoke;
+    width: fit-content;
+    margin: 15px 10px 15px 10px;
 }
 
 .message_input {
@@ -844,7 +859,7 @@ input[type="search"]::-webkit-search-cancel-button {
     min-height: 200px;
 }
 
-.lists div{
+.lists div {
     padding: 17px;
     text-align: left;
     cursor: pointer;
@@ -855,6 +870,7 @@ input[type="search"]::-webkit-search-cancel-button {
     font-weight: 600;
     color: rgb(210, 209, 209);
 }
+
 .list_subtitle {
     font-size: 15px;
     font-weight: 600;
@@ -918,7 +934,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .randomly_title {
-    font-size:24px;
+    font-size: 24px;
     font-family: 'Righteous', cursive;
     background-color: #11151b;
     padding: 15px 25px 25px 25px;
