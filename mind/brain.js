@@ -277,7 +277,10 @@ function socket(io) {
             }
         }
 
+        var timeWaiting, timeReading;
         function callAlian(id, ask) {
+            clearTimeout(timeWaiting)
+            clearTimeout(timeReading)
             var myId = userdata.id
             // CHECK USER ID
             if (idCheck(myId)[0] === false || userdata.connected === false) {
@@ -286,13 +289,28 @@ function socket(io) {
             }
 
             if (id in x) {
-                var res = alian.call_alian(x[id], myId, userdata.username, ask)
-                if (res.length > "") {
-                    var timeWait = Number(`${res.length}00`)
-                    setTimeout(() => {
-                        socket.emit("message", { message: res, id: id, username: x[id].username })
-                    }, timeWait);
+                // SET TIME READ THE MESSAGE
+                var timeRead = (Number(`${ask.length}0`)) + (Number(`${Math.floor(Math.random() * 5)}000`))
+                if (timeRead > 100000) {
+                    timeRead = 10000
                 }
+                timeReading = setTimeout(() => {
+                    // RESPONES FROM ALIAN ..
+                    var res = alian.call_alian(x[id], myId, userdata.username, ask)
+                    if (res.length > "") {
+                        // SEND THE EVENT TO THIS USER ..
+                        socket.emit('typing_on', { c: true, id: id })
+                        var timeWait = (Number(`${res.length}0`)) + (Number(`${Math.floor(Math.random() * 5)}000`))
+                        if (timeWait > 100000) {
+                            timeWait = 10000
+                        }
+                        timeWaiting = setTimeout(() => {
+                            socket.emit('typing_on', { c: false, id: id })
+                            socket.emit("message", { message: res, id: id, username: x[id].username })
+                        }, timeWait);
+                    }
+
+                }, timeRead);
             }
         }
 
