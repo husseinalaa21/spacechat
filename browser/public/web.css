@@ -912,8 +912,53 @@ input[type="search"]::-webkit-search-cancel-button {
     font-size: 16px;
 }
 
-.monitor {
+.space_loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    align-content: center;
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+}
+
+.space_loading_title {
+    font-family: 'Righteous', cursive;
+    font-size: 16px;
+    color: #D7E9F7;
+    padding: 10px;
+    clear: both;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.space_loading_line {
+    height: 2px;
+    border-radius: 2px;
+    width: 40%;
+    background-color: #457cd6;
+    background: linear-gradient(-45deg, #528be8, #5fd6f7, #0095ff, #2192FF);
+    animation: gradient 15s ease infinite;
+    background-size: 400% 400%;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 .randomly {

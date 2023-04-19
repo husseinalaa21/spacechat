@@ -117,11 +117,10 @@ socket.on("dna-ok", e => {
         document.cookie = `enter=true; path=/`;
 
         // START
-        select(0)
+        select(1)
     } else {
         access.style.display = "block"
         space_loading.style.display = "none"
-        space_loading.display = "none"
         access_mes.innerHTML = `<div class="err">${e.mes}</div>`
         clearCookies()
     }
