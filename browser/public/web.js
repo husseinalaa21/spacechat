@@ -1,6 +1,6 @@
 const socket = io(window.location.href.replace("/web", ""));
 // ACCESS SECTION
-var username, password, pincode, enter_click, access, chat, space_loading, err,access_mes;
+var username, password, pincode, enter_click, access, chat, space_loading, err, access_mes;
 username = document.getElementById("username")
 password = document.getElementById("password")
 pincode = document.getElementById("pincode")
@@ -75,8 +75,14 @@ window.onload = () => {
         password.value = ""
         pincode.value = ""
     }
-
-    select_data(data_selected)
+    // GET WAY TO SAVE DATA
+    var data_s = xGet("data_selected")
+    if (data_s !== undefined && isNaN(data_s) === false) {
+        select_data(data_s)
+        data_selected = data_s
+    } else {
+        select_data(data_selected)
+    }
 }
 
 // EVENTs
@@ -115,6 +121,7 @@ socket.on("dna-ok", e => {
         document.cookie = `password=${dna.password}; path=/`;
         document.cookie = `pincode=${dna.pincode}; path=/`;
         document.cookie = `enter=true; path=/`;
+        document.cookie = `data_selected=${data_selected}; path=/`;
 
         // START
         select(1)
@@ -1243,6 +1250,7 @@ function select_data(id) {
         idsTypeData[id].system()
     }
     data_selected = id
+    document.cookie = `data_selected=${data_selected}; path=/`;
 }
 
 function broweser_data() {
