@@ -15,7 +15,7 @@ const x_alians = []
 // #BRAIN - CONNECTION
 function socket(io) {
     io.on('connection', socket => {
-        // THIS USER DATA
+        // THIS USER DATA ~ WHILE CONNECTED TO SERVER
         const userdata = {
             "id": "",
             "socketId": "",
@@ -67,7 +67,7 @@ function socket(io) {
                     // SECURITY DATA
                     "connected": true,
                     "randomlySingle": false,
-                    "online": "",
+                    "online": ""
                 }
                 socket.emit("dna-ok", { connected: true, id: new_dna.id, username: new_dna.username, idP: new_dna.idP })
             } else {
@@ -322,7 +322,6 @@ function socket(io) {
             }
             userdata.connected = false
             delete x[userdata.id]
-            socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
         })
     })
 }

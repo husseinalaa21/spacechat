@@ -1,6 +1,6 @@
 const socket = io(window.location.href.replace("/web", ""));
 // ACCESS SECTION
-var username, password, pincode, enter_click, access, chat, space_loading, err, access_mes;
+var username, password, pincode, enter_click, access, chat, space_loading, err, access_mes, encryptedConnect;
 username = document.getElementById("username")
 password = document.getElementById("password")
 pincode = document.getElementById("pincode")
@@ -10,11 +10,14 @@ chat = document.getElementById("chat")
 access_mes = document.getElementById("access_mes")
 space_loading = document.getElementById("space_loading")
 err = document.getElementById("error")
+encryptedConnect = document.getElementById("encrypted-connect")
 
 var dna = {
     username: "",
     password: "",
-    pincode: ""
+    pincode: "",
+    err: 0,
+    first_connect: false
 }
 
 const xu = {
@@ -33,9 +36,7 @@ const xu = {
     lastdate: "",
     currentId: "",
     chattingRoom: false,
-    onlineId: "",
-    // FIXABLE SYSYTEM DATA
-    back: ""
+    onlineId: ""
 }
 
 function xGet(cname) {
@@ -103,33 +104,48 @@ enter_click.addEventListener("click", function () {
     socket.emit("dna", dna)
 })
 
+// CONNECTED & DISCONNECTED
+var etc_time, etf_time;
 socket.on("dna-ok", e => {
-    if (e.connected === true) {
-        // SUCCESS ENTER
-        access.style.display = "none"
-        space_loading.style.display = "none"
-        chat.style.display = "block"
+    if (dna.first_connect === false) {
+        if (e.connected === true) {
+            // SET FIRST TIEME
+            dna.first_connect = true
+            // SUCCESS ENTER
+            access.style.display = "none"
+            space_loading.style.display = "none"
+            chat.style.display = "block"
 
-        // SET DATA ~STORAGE
-        xu.id = e.id
-        xu.username = e.username
-        xu.idP = e.id + e.idP
-        // SYNC DATA EVENT
-        syncData()
-        // SET DATA ~BROWESER
-        document.cookie = `username=${dna.username}; path=/`;
-        document.cookie = `password=${dna.password}; path=/`;
-        document.cookie = `pincode=${dna.pincode}; path=/`;
-        document.cookie = `enter=true; path=/`;
-        document.cookie = `data_selected=${data_selected}; path=/`;
+            // SET DATA ~STORAGE
+            xu.id = e.id
+            xu.username = e.username
+            xu.idP = e.id + e.idP
+            // SYNC DATA EVENT
+            syncData()
+            // SET DATA ~BROWESER
+            document.cookie = `username=${dna.username}; path=/`;
+            document.cookie = `password=${dna.password}; path=/`;
+            document.cookie = `pincode=${dna.pincode}; path=/`;
+            document.cookie = `enter=true; path=/`;
+            document.cookie = `data_selected=${data_selected}; path=/`;
 
-        // START
-        select(1)
+            // START
+            select(1)
+        } else {
+            // SET FIRST TIEME
+            dna.first_connect = false
+
+            access.style.display = "block"
+            space_loading.style.display = "none"
+            access_mes.innerHTML = `<div class="err">${e.mes}</div>`
+            clearCookies()
+        }
     } else {
-        access.style.display = "block"
-        space_loading.style.display = "none"
-        access_mes.innerHTML = `<div class="err">${e.mes}</div>`
-        clearCookies()
+        // encrypted-connect
+        encryptedConnect.className = "encrypted_connect ect"
+        etc_time = setTimeout(() => {
+            encryptedConnect.style.display = "none"
+        }, 1000);
     }
 })
 
@@ -1225,11 +1241,27 @@ socket.on("randomly-ok", e => {
 
 // ERROR MESSAGE
 socket.on("disconnect", (e) => {
-    err.innerHTML = `<div class="err"> Sorry, an unknown error occurred during the connection, reconnect, <a href="/web"> (Refresh) </a></div>`
+    if (dna.username.length > 0 && dna.password.length > 0) {
+        // encrypted-connect
+        clearTimeout(etc_time)
+        clearTimeout(etf_time)
+        encryptedConnect.style.display = "block"
+        encryptedConnect.className = "encrypted_connect ecf"
+
+        if (dna.err < 10) {
+            etf_time = setTimeout(() => {
+                dna.err = dna.err + 1
+                socket.emit("dna", dna)
+            }, 2000);
+        } else {
+            err.innerHTML = `<div class="err"> Sorry, an unknown error occurred during the connection, reconnect, <a href="/web"> (Refresh) </a></div>`
+        }
+    }
 })
-socket.on("err", e => {
+
+/*socket.on("err", e => {
     err.innerHTML = `<div class="err"> ${e}, <a href="/web"> (Refresh) </a></div>`
-})
+})*/
 
 
 // DATA 

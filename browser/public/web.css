@@ -1,3 +1,28 @@
+.home {
+    margin-top: 17px;
+}
+
+.encrypted_connect {
+    height: 10px;
+    transition: 4s;
+}
+
+.ect {
+    background-color: #457cd6;
+    background: linear-gradient(-45deg, #4177cd, #46acc8, #027bd2, #1876cd);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    transition: 0.4s;
+}
+
+.ecf {
+    background-color: #d64545;
+    background: linear-gradient(-45deg, #cd4141, #c84646, #d23a02, #cd1818);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    transition: 0.4s;
+}
+
 #access {
     max-width: 400px;
     margin: auto;

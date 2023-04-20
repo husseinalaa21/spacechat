@@ -11,7 +11,7 @@ body {
 
 header {
     display: flex;
-    height: 58px;
+    height: 50px;
     width: auto;
     text-align: center;
     flex-direction: row;
@@ -21,14 +21,13 @@ header {
     padding-top: 20px;
     padding-bottom: 20px;
     background-color: #11151b;
-    margin-bottom: 20px;
     border-bottom: 1px solid #1c222c;
 }
 
 header h1 {
     color: aliceblue;
     font-family: 'Press Start 2P', cursive;
-    font-size: 22px;
+    font-size: 20px;
 }
 
 .alert {
