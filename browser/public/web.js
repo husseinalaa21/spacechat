@@ -1,6 +1,6 @@
 const socket = io(window.location.href.replace("/web", ""));
 // ACCESS SECTION
-var username, password, pincode, enter_click, access, chat, space_loading, err;
+var username, password, pincode, enter_click, access, chat, space_loading, err,access_mes;
 username = document.getElementById("username")
 password = document.getElementById("password")
 pincode = document.getElementById("pincode")
@@ -29,6 +29,8 @@ const xu = {
     requests: [],
     messages: {},
     // SYSTEM DATA
+    date: new Date(),
+    lastdate: "",
     currentId: "",
     chattingRoom: false,
     onlineId: "",
@@ -72,12 +74,9 @@ window.onload = () => {
         username.value = ""
         password.value = ""
         pincode.value = ""
-
-        var pin = Math.floor(1000 + Math.random() * 9000);
-        pincode.placeholder = pin
-        dna.pincode = pin
-        select_data(0)
     }
+
+    select_data(data_selected)
 }
 
 // EVENTs
@@ -109,7 +108,8 @@ socket.on("dna-ok", e => {
         xu.id = e.id
         xu.username = e.username
         xu.idP = e.id + e.idP
-
+        // SYNC DATA EVENT
+        syncData()
         // SET DATA ~BROWESER
         document.cookie = `username=${dna.username}; path=/`;
         document.cookie = `password=${dna.password}; path=/`;
@@ -183,7 +183,7 @@ function you() {
             <div class="you_title"> <h1>${username}</h1><p><mark>#</mark>${id}</p> </div>
         </div>
     
-        <div class="description"> ${bio} </div>
+        <!--<div class="description"> ${bio} </div>-->
 
         <div class="logOut" onclick="logOut()"> Sign out </div>
     </div>
@@ -269,6 +269,8 @@ function handling_user(state, id) {
         xu.bans = cleaner(newBans)
     }
     userOptions(id, false)
+    // SYNC DATA EVENT
+    syncData()
 }
 
 var backArrow = (back, id) => {
@@ -306,6 +308,8 @@ function user_update(id, username, message) {
             messages: message.length > 0 ? [message] : []
         }
     }
+    // SYNC DATA EVENT
+    syncData()
 }
 
 function chattingRoom(back, id) {
@@ -384,7 +388,7 @@ socket.on("userInfo", e => {
                 
                 <div class="result_title"> <h1>${username}</h1><p><mark>#</mark>${id}</p> </div>
             </div>
-            <div class="result_bio">${bio}</div>
+            <!--<div class="result_bio">${bio}</div>-->
             
             <div class="options">
                 <div class="user_options" onclick="userOptions('${id}', true)"> More </div>
@@ -460,6 +464,8 @@ function sendMessage() {
 
         var message = [mm, strTime(), false]
         xu.messages[id].messages.push(message)
+        // SYNC DATA EVENT
+        syncData()
 
         mes([mm, strTime()], false)
         document.getElementById("message_input").value = ""
@@ -1220,8 +1226,13 @@ socket.on("err", e => {
 
 
 // DATA 
-var idsTypeData = { 0: { id: "thespacechat_data", system: web3driver }, 1: { id: "googleDrive_data", system: googledrive } }
+var idsTypeData = { 0: { id: "browser_data", system: broweser_data, sync: b_data }, 1: { id: "none_data", system: none_data, sync: n_data } }
 var typeData = -1
+var data_selected = 0
+
+function syncData() {
+    idsTypeData[data_selected].sync()
+}
 
 function select_data(id) {
     for (td in idsTypeData) {
@@ -1231,12 +1242,45 @@ function select_data(id) {
         document.getElementById(idsTypeData[id].id).className = "data_select data_select_true"
         idsTypeData[id].system()
     }
+    data_selected = id
 }
 
-function web3driver() {
-    document.getElementById("upload_data_mes").innerHTML = `<div class="thespacechatDataLoaded"> If there is any data connected with this account, it will loaded after login. </div>`
+function broweser_data() {
+    document.getElementById("upload_data_mes").innerHTML = `<div class="spacechat_data"> If there is any data connected with this account in this broweser, it will loaded after login. </div>`
+    var broweser = xGet("b_data")
+    try {
+        if (typeof JSON.parse(broweser) === 'object') {
+            // There is data!
+            var b_xu = JSON.parse(broweser)
+            if ("messages" in b_xu && "bans" in b_xu && "requests" in b_xu) {
+                // UPDATE THIS ARRAYS
+                xu.messages = b_xu.messages
+                xu.bans = b_xu.bans
+                xu.requests = b_xu.requests
+                xu.friends = b_xu.friends
+            } else {
+                // Create new data!
+                b_data(true)
+            }
+        } else {
+            // Create new data!
+            b_data(true)
+        }
+    } catch (err) {
+        // Create new data!
+        b_data(true)
+    }
 }
 
-function googledrive() {
-    document.getElementById("upload_data_mes").innerHTML = `<div class="googleDataLoaded"> Sorry, This method not available yet. </div>`
+function b_data(c) {
+    xu.lastdate = new Date();
+    document.cookie = `b_data=${JSON.stringify(xu)}; path=/`;
+}
+
+function n_data() {
+    // WEB3 DO NOTHING
+}
+
+function none_data() {
+    document.getElementById("upload_data_mes").innerHTML = `<div class="spacechat_data"> No data will save. </div>`
 }

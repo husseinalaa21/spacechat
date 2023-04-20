@@ -342,6 +342,8 @@
     color: #457cd6;
     padding: 6px;
     background-color: #191e25;
+    max-height: 100px;
+    overflow-y: auto;
 }
 
 .space_container {
@@ -1077,7 +1079,7 @@ input[type="search"]::-webkit-search-cancel-button {
     text-decoration-color: #d7e9f75f;
 }
 
-.thespacechatDataLoaded {
+.spacechat_data {
     margin-top: 15px;
     padding: 10px;
     border-radius: 4px;

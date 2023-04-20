@@ -85,7 +85,7 @@ function id(username, password, pincode) {
         var passId = splitN(password)
         var idUser = ""
 
-        if (userId > 0 && passId > 0) {
+        if (userId > 0 && passId > 0 && isNaN(pincode) === false) {
             var userpass = `${userId + passId}`
             var userpasspin = `${Number(userId) + Number(passId) + Number(pincode)}`
             var idX = `${userId}${userpass}${passId}${userpasspin}`.split("")

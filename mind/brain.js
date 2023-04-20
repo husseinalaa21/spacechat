@@ -71,7 +71,7 @@ function socket(io) {
                 }
                 socket.emit("dna-ok", { connected: true, id: new_dna.id, username: new_dna.username, idP: new_dna.idP })
             } else {
-                socket.emit("dna-ok", { connected: false, mes: "looks like you enterd a unvalid username or password." })
+                socket.emit("dna-ok", { connected: false, mes: "looks like you enterd a unvalid username or password, or pincode." })
             }
         })
 

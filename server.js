@@ -18,7 +18,7 @@ brain.socket(io)
 app.use((req, res, next) => {
     var host = req.get('Host');
     if (host === 'thespacechat.com') {
-        return res.redirect(301, 'https://spacechat.app/');
+        return res.redirect(301, 'https://spacechat.app' + req.originalUrl);
     }
     return next();
 });

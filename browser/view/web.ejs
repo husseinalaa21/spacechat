@@ -70,7 +70,7 @@
                 <div class="input_title"> Username </div>
                 <div class="username_section">
                     <input type="text" id="username" placeholder="" autocomplete="off">
-                    <p>#</p> <input type="text" id="pincode" placeholder="" autocomplete="off">
+                    <p>#</p> <input type="text" id="pincode" placeholder="0000" autocomplete="off" maxlength="4" minlength="2">
                 </div>
 
                 <div class="input_title"> Password </div>
@@ -81,24 +81,21 @@
             </div>
 
         </div>
-        <!--<div class="drop_data" id="drop_data">
-            <div class="drop_data_title"> Upload your data </div>
+        <div class="drop_data" id="drop_data">
+            <div class="drop_data_title"> Database </div>
             <div class="drop_data_form">
-                <div class="drop_data_dis"> Choice a way to save or receive your data! </div>
+                <div class="drop_data_dis"> Choice a way to save or receive the data! </div>
                 <div class="select_data">
-                    <div class="data_select" id="thespacechat_data" onclick="select_data(0)">
-                        Web3
+                    <div class="data_select" id="browser_data" onclick="select_data(0)">
+                        Browser
                     </div>
-                    <div class="data_select" id="googleDrive_data" onclick="select_data(1)">
-                        Browser's Cookies
-                    </div>
-                    <div class="data_select" id="googleDrive_data" onclick="select_data(1)">
-                        
+                    <div class="data_select" id="none_data" onclick="select_data(1)">
+                        None
                     </div>
                 </div>
                 <div id="upload_data_mes"></div>
             </div>
-        </div>-->
+        </div>
         <div id="enter_click">
             Login
         </div>
