@@ -30,6 +30,7 @@ const xu = {
     friends: [],
     bans: [],
     requests: [],
+    match: "",
     messages: {},
     // SYSTEM DATA
     date: new Date(),
@@ -668,7 +669,7 @@ function exitRandomly() {
 }
 
 function research() {
-    var rud = xu.bans.concat(xu.friends, xu.requests)
+    var rud = xu.bans.concat(xu.friends, xu.requests, xu.match)
     socket.emit("randomly", { s: true, rud: rud })
 }
 
@@ -1235,7 +1236,11 @@ socket.on("randomly-ok", e => {
         user_update(id, username, "")
 
         xu.onlineId = id
+
         chattingRoom("exitRandomly", id)
+
+        // ADD TO MATCH
+        xu.match = id
     }
 })
 
@@ -1259,9 +1264,9 @@ socket.on("disconnect", (e) => {
     }
 })
 
-/*socket.on("err", e => {
+socket.on("err", e => {
     err.innerHTML = `<div class="err"> ${e}, <a href="/web"> (Refresh) </a></div>`
-})*/
+})
 
 
 // DATA 
