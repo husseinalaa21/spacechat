@@ -112,8 +112,8 @@
 }
 
 .discription {
-    line-height: 27px;
-    font-size: 18px;
+    line-height: 30px;
+    font-size: 20px;
     padding-top: 10px;
     color: gainsboro;
 }
@@ -207,9 +207,9 @@
 }
 
 .sectionX p {
-    font-size: 17px;
+    font-size: 19px;
     color: gainsboro;
-    line-height: 26px;
+    line-height: 30px;
     margin-top: 20px;
 }
 
@@ -229,9 +229,10 @@
 }
 
 .space p {
-    font-size: 17px;
+    font-size: 19px;
     padding: 0 12px 10px 12px;
     margin-top: 0;
+    line-height: 30px;
 }
 
 .end {

@@ -334,7 +334,7 @@ function chattingRoom(back, id) {
         <div class="chatting_top" onclick="searchId(false,'${id}','${back}')"> <h3>${username}</h3> <p> Tap here for more options </p> </div>
         <div class="chat_box" id="chatting_container" onscroll="scrollChattingBox()">
             <div class="chatting_container_box" id="chatting_container_box">
-                <p class="chatting_alert"> <img src="/icons/lock-solid.svg" width="11px"> &nbsp; This chat is front-front encrypted. </p>
+                <p class="chatting_alert"> <img src="/icons/lock-solid.svg" width="11px"> &nbsp; Messages are end-to-end encrypted. No one outside of this chat, not even Spacechat, can read or listen to them. </p>
                 ${messages_container()}
             </div>
             <div id="typing_on"></div>
