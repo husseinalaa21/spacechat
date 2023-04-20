@@ -219,20 +219,22 @@
     overflow: hidden;
     border: 1px solid #24292f;
     background-color: #191f28;
-    width: fit-content;
+    width: 100%;
+    color: #cccccc;
 }
 
 .space h2 {
-    font-size: 20px;
+    font-size: 19px;
     padding: 12px;
     margin-bottom: 0;
+    font-weight: 600;
 }
 
 .space p {
-    font-size: 19px;
+    font-size: 18px;
     padding: 0 12px 10px 12px;
     margin-top: 0;
-    line-height: 30px;
+    line-height: 28px;
 }
 
 .end {
