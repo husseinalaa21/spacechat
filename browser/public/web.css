@@ -653,7 +653,8 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .chatting_alert {
-    max-width: 60%;
+    width: fit-content;
+    max-width: 80%;
     margin: 20px auto 10px auto;
     text-align: center;
     padding: 13px 20px 13px 20px;
