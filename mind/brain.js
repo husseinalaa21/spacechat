@@ -42,7 +42,7 @@ function socket(io) {
         socket.on("dna", e => {
             // DOSE IS'T HAVE TEMPORARY DATA?
             if (userdata.connected === true) {
-                socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
+                err("DNA")
                 return false
             }
 
@@ -80,7 +80,7 @@ function socket(io) {
         socket.on("searchId", e => {
             var id = idCheck(e.id)[1]
             if (idCheck(userdata.id)[0] === false || userdata.connected === false) {
-                socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
+                err("Search")
                 return false
             }
 
@@ -105,7 +105,7 @@ function socket(io) {
             }
 
             if (userdata.connected === false) {
-                socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
+                err("Send Message")
                 return false
             }
 
@@ -126,7 +126,7 @@ function socket(io) {
             }
 
             if (userdata.connected === false) {
-                socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
+                err("Typing")
                 return false
             }
 
@@ -149,7 +149,7 @@ function socket(io) {
 
             // CHECK USER ID
             if (idCheck(myId)[0] === false || userdata.connected === false) {
-                socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
+                err("Randomy")
                 return false
             }
 
@@ -179,7 +179,7 @@ function socket(io) {
             var myId = userdata.id
             // CHECK USER ID
             if (idCheck(myId)[0] === false || userdata.connected === false) {
-                socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
+                err("Search Randomy")
                 return false
             }
 
@@ -225,7 +225,7 @@ function socket(io) {
                     var myId = userdata.id
                     // CHECK USER ID
                     if (idCheck(myId)[0] === false || userdata.connected === false) {
-                        socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
+                        err("Single Tree")
                         return false
                     }
 
@@ -284,7 +284,7 @@ function socket(io) {
             var myId = userdata.id
             // CHECK USER ID
             if (idCheck(myId)[0] === false || userdata.connected === false) {
-                socket.emit("err", "Sorry, an unknown error occurred during the connection, reconnect")
+                err("Call Alian")
                 return false
             }
 
@@ -312,6 +312,12 @@ function socket(io) {
 
                 }, timeRead);
             }
+        }
+
+        // PRINT ERROR TO USER
+        function err(r) {
+            // ERRORS
+            socket.emit("err", `Sorry, an unknown error occurred during the connection "${r}", <a href="/">reconnect</a>`)
         }
 
 

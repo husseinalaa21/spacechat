@@ -16,7 +16,6 @@ var dna = {
     username: "",
     password: "",
     pincode: "",
-    err: 0,
     first_connect: false
 }
 
@@ -30,6 +29,7 @@ const xu = {
     friends: [],
     bans: [],
     requests: [],
+    whiteList: [],
     match: "",
     messages: {},
     // SYSTEM DATA
@@ -254,12 +254,12 @@ function userOptions(id, s) {
         document.getElementById("userState").innerHTML = ""
         userOptions_glich = false
     } else {
-        var friend = `<div class="option request" onclick="handling_user('friend','${id}')"> Add Friend </div>`
-        var ban = `<div class="option ban" onclick="handling_user('ban','${id}')"> Block </div>`
+        var friend = `<div class="option request" onclick="handling_user('friend','${id}',true)"> Add Friend </div>`
+        var ban = `<div class="option ban" onclick="handling_user('ban','${id}',true)"> Block </div>`
         if (xu.friends.includes(id)) {
-            friend = `<div class="option friend" onclick="handling_user('request','${id}')"> Friend </div>`
+            friend = `<div class="option friend" onclick="handling_user('request','${id}',true)"> Friend </div>`
         } else if (xu.bans.includes(id)) {
-            ban = `<div class="option unBan" onclick="handling_user('ban','${id}')"> UnBlock </div>`
+            ban = `<div class="option unBan" onclick="handling_user('ban','${id}',true)"> UnBlock </div>`
         }
         var con = `<div class="userOptions"> ${friend} ${ban} </div>`
 
@@ -268,7 +268,7 @@ function userOptions(id, s) {
     }
 }
 
-function handling_user(state, id) {
+function handling_user(state, id, c) {
     // REMOVE IT FROM DATA // CLEAN PEAPER
     function cleaner(arr) {
         var index = arr.indexOf(id)
@@ -281,18 +281,33 @@ function handling_user(state, id) {
     if (state === "friend" && xu.friends.includes(id) === false) {
         xu.friends.push(id)
         var newBans = xu.bans
+        var newWhiteList = xu.whiteList
+        xu.whiteList = cleaner(newWhiteList)
         xu.bans = cleaner(newBans)
     } else if (state === "ban" && xu.bans.includes(id) === false) {
         xu.bans.push(id)
         var newFriends = xu.friends
+        var newWhiteList = xu.whiteList
+        xu.whiteList = cleaner(newWhiteList)
         xu.friends = cleaner(newFriends)
-    } else {
+    } else if (state === "whiteList" && xu.whiteList.includes(id) === false) {
+        xu.whiteList.push(id)
         var newFriends = xu.friends
         var newBans = xu.bans
         xu.friends = cleaner(newFriends)
         xu.bans = cleaner(newBans)
+    } else {
+        var newFriends = xu.friends
+        var newBans = xu.bans
+        var newWhiteList = xu.whiteList
+        xu.whiteList = cleaner(newWhiteList)
+        xu.friends = cleaner(newFriends)
+        xu.bans = cleaner(newBans)
     }
-    userOptions(id, false)
+    // CHECK IF THE FUNCTION CALLED FROM USER OR NOT
+    if (c === true) {
+        userOptions(id, false)
+    }
     // SYNC DATA EVENT
     syncData()
 }
@@ -433,7 +448,7 @@ function messages() {
 
         if (Object.keys(xu.messages).length > 0) {
             for (const [key, value] of Object.entries(xu.messages)) {
-                if (xu.friends.includes(key)) {
+                if (xu.friends.includes(key) || xu.whiteList.includes(key)) {
                     // ADD AS FRIEND
                     var username = xu.messages[key].username
                     var lastMessage = "Tap to start chating"
@@ -488,6 +503,10 @@ function sendMessage() {
 
         var message = [mm, strTime(), false]
         xu.messages[id].messages.push(message)
+        if (!xu.friends.includes(id) && !xu.bans.includes(id) && !xu.requests.includes(id) && !xu.whiteList.includes(id)) {
+            // THIS ALIAN IS COMPLETLE NEW
+            handling_user("whiteList", id, false)
+        }
         // SYNC DATA EVENT
         syncData()
 
@@ -517,35 +536,31 @@ function sty() {
 }
 
 socket.on("typing_on", e => {
-    var chattingContainer = document.getElementById("chatting_container")
-    // TAKE THE DATA FROM THIS USER
     var id = e.id
     var event = e.c
 
-    if (xu.bans.includes(id)) {
-        // USER BLOCK THIS USER
-        return false
-    } else {
-        if (xu.currentId === id && xu.chattingRoom === true) {
+    if (xu.currentId === id && xu.chattingRoom === true) {
+        //CONTAINER EVANTS
+        var chattingContainer = document.getElementById("chatting_container")
+        if (xu.bans.includes(id)) {
+            // USER BLOCK THIS USER
+            return false
+        } else {
             if (event === true) {
                 document.getElementById("typing_on").innerHTML = `<p class="typing"> ... </p>`
+                if (scrollHeight === true) {
+                    chattingContainer.scrollTo(0, chattingContainer.scrollHeight);
+                }
+                heighNow = chattingContainer.scrollHeight + chattingContainer.scrollTop
+                heighChange = chattingContainer.scrollHeight + chattingContainer.scrollTop
             } else {
                 document.getElementById("typing_on").innerHTML = ``
             }
         }
     }
-
-    if (scrollHeight === true) {
-        chattingContainer.scrollTo(0, chattingContainer.scrollHeight);
-    }
-
-
-    heighNow = chattingContainer.scrollHeight + chattingContainer.scrollTop
-    heighChange = chattingContainer.scrollHeight + chattingContainer.scrollTop
 })
 
 socket.on("message", e => {
-    document.getElementById("typing_on").innerHTML = ``
     // TAKE THE DATA FROM THIS USER
     var id = e.id
     var username = e.username
@@ -557,13 +572,23 @@ socket.on("message", e => {
     } else {
         // push message to container
         if (xu.currentId === id && xu.chattingRoom === true) {
+            //CONTAINER EVANTS
+            document.getElementById("typing_on").innerHTML = ``
             user_update(id, username, message)
             mes(message, true)
+
         } else if (xu.requests.includes(id)) {
             // DO NOTHING ABOUT IT 
+            return false
         } else {
-            // FRIEND OR NEW USER
-            user_update(id, username, message)
+            // FRIEND/WHITE LIST OR NEW USER
+            if (xu.friends.includes(id) || xu.whiteList.includes(id)) {
+                user_update(id, username, message)
+            } else {
+                // NEW USER -ADD TO REQUESTED
+                xu.requests.push(id)
+                user_update(id, username, message)
+            }
         }
     }
 })
@@ -619,12 +644,12 @@ function scrollChatting() {
 
 function messageRequests() {
     var rm = () => {
-        var m = `<div class="nothing" >Nothing to show.</div>`
+        var m = `<div class="nothing">Nothing to show.</div>`
         var nm = ``
 
         if (Object.keys(xu.messages).length > 0) {
             for (const [key, value] of Object.entries(xu.messages)) {
-                if (!xu.friends.includes(key)) {
+                if (xu.requests.includes(key)) {
                     // ADD AS GHOST
                     var username = xu.messages[key].username
                     var lastMessage = "Tap to start chating"
@@ -1233,6 +1258,11 @@ socket.on("randomly-ok", e => {
         var id = e.id
         var username = e.username
 
+        if (!xu.friends.includes(id) && !xu.bans.includes(id) && !xu.requests.includes(id) && !xu.whiteList.includes(id)) {
+            // THIS ALIAN IS COMPLETLE NEW
+            handling_user("whiteList", id, false)
+        }
+
         user_update(id, username, "")
 
         xu.onlineId = id
@@ -1253,14 +1283,10 @@ socket.on("disconnect", (e) => {
         encryptedConnect.style.display = "block"
         encryptedConnect.className = "encrypted_connect ecf"
 
-        if (dna.err < 10) {
-            etf_time = setTimeout(() => {
-                dna.err = dna.err + 1
-                socket.emit("dna", dna)
-            }, 2000);
-        } else {
-            err.innerHTML = `<div class="err"> Sorry, an unknown error occurred during the connection, reconnect, <a href="/web"> (Refresh) </a></div>`
-        }
+
+        etf_time = setTimeout(() => {
+            socket.emit("dna", dna)
+        }, 2000);
     }
 })
 
@@ -1297,12 +1323,13 @@ function broweser_data() {
         if (typeof JSON.parse(broweser) === 'object') {
             // There is data!
             var b_xu = JSON.parse(broweser)
-            if ("messages" in b_xu && "bans" in b_xu && "requests" in b_xu) {
+            if ("messages" in b_xu && "bans" in b_xu && "requests" in b_xu && "whiteList" in b_xu) {
                 // UPDATE THIS ARRAYS
                 xu.messages = b_xu.messages
                 xu.bans = b_xu.bans
                 xu.requests = b_xu.requests
                 xu.friends = b_xu.friends
+                xu.whiteList = b_xu.whiteList
             } else {
                 // Create new data!
                 b_data(true)
