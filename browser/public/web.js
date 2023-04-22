@@ -282,24 +282,32 @@ function handling_user(state, id, c) {
         xu.friends.push(id)
         var newBans = xu.bans
         var newWhiteList = xu.whiteList
+        var newRequest = xu.requests
+        xu.requests = cleaner(newRequest)
         xu.whiteList = cleaner(newWhiteList)
         xu.bans = cleaner(newBans)
     } else if (state === "ban" && xu.bans.includes(id) === false) {
         xu.bans.push(id)
         var newFriends = xu.friends
         var newWhiteList = xu.whiteList
+        var newRequest = xu.requests
+        xu.requests = cleaner(newRequest)
         xu.whiteList = cleaner(newWhiteList)
         xu.friends = cleaner(newFriends)
     } else if (state === "whiteList" && xu.whiteList.includes(id) === false) {
         xu.whiteList.push(id)
         var newFriends = xu.friends
         var newBans = xu.bans
+        var newRequest = xu.requests
+        xu.requests = cleaner(newRequest)
         xu.friends = cleaner(newFriends)
         xu.bans = cleaner(newBans)
     } else {
         var newFriends = xu.friends
         var newBans = xu.bans
         var newWhiteList = xu.whiteList
+        var newRequest = xu.requests
+        xu.requests = cleaner(newRequest)
         xu.whiteList = cleaner(newWhiteList)
         xu.friends = cleaner(newFriends)
         xu.bans = cleaner(newBans)
