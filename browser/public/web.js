@@ -504,7 +504,7 @@ function sendMessage() {
         var message = [mm, strTime(), false]
         xu.messages[id].messages.push(message)
         if (!xu.friends.includes(id) && !xu.bans.includes(id) && !xu.whiteList.includes(id)) {
-            // THIS ALIAN IS COMPLETLE NEW
+            // THIS ALIAN IS COMPLETLE NEW OR WAS IN REQUEST LIST
             handling_user("whiteList", id, false)
         }
         // SYNC DATA EVENT
