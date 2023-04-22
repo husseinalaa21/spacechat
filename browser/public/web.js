@@ -503,7 +503,7 @@ function sendMessage() {
 
         var message = [mm, strTime(), false]
         xu.messages[id].messages.push(message)
-        if (!xu.friends.includes(id) && !xu.bans.includes(id) && !xu.requests.includes(id) && !xu.whiteList.includes(id)) {
+        if (!xu.friends.includes(id) && !xu.bans.includes(id) && !xu.whiteList.includes(id)) {
             // THIS ALIAN IS COMPLETLE NEW
             handling_user("whiteList", id, false)
         }
