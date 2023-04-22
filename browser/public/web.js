@@ -79,9 +79,9 @@ window.onload = () => {
     }
     // GET WAY TO SAVE DATA
     var data_s = xGet("data_selected")
-    if (data_s !== undefined && isNaN(data_s) === false) {
-        select_data(data_s)
-        data_selected = data_s
+    if (data_s !== undefined && !isNaN(data_s)) {
+        data_selected = Number(data_s)
+        select_data(data_selected)
     } else {
         select_data(data_selected)
     }
@@ -524,10 +524,14 @@ function sty() {
         socket.emit('typing', { c: true, id: id });
         setTimeout(() => {
             socket.emit("typing", { c: false, id: id });
-            document.getElementById("send_message_button").className = "send_message_button"
-            setTimeout(() => {
+            if(xu.currentId === id && xu.chattingRoom === true){
+                document.getElementById("send_message_button").className = "send_message_button"
+                setTimeout(() => {
+                    typ = false;
+                }, 500);
+            } else {
                 typ = false;
-            }, 500);
+            }
         }, 2000);
         document.getElementById("send_message_button").className = "send_message_button_true"
     } else {
