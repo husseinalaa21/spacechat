@@ -1,1 +1,42 @@
-function _0x2cd9(){const _0x5be57b=['2859983lkzKXh','env','Server','\x20***\x20SERVER\x20START\x20***\x20.\x20port\x20is\x20','use','ejs','set','express','/web','40poWiAl','http','7905600rADVwS','https://spacechat.app','Host','./browser/view','thespacechat.com','PORT','log','5626880EByUoE','web','rouls','static','2618678SLbcWc','urlencoded','./browser/public','./mind/brain','/rouls','469823ZvkuHw','493422sqpDcT','711935SHjYLx','socket.io','3NNUxwZ','get','home','render'];_0x2cd9=function(){return _0x5be57b;};return _0x2cd9();}const _0x3146dc=_0x1421;(function(_0x2dc785,_0x1417e8){const _0x223637=_0x1421,_0x1b3459=_0x2dc785();while(!![]){try{const _0x2b8c7d=-parseInt(_0x223637(0x183))/0x1+parseInt(_0x223637(0x17e))/0x2*(-parseInt(_0x223637(0x187))/0x3)+parseInt(_0x223637(0x194))/0x4*(parseInt(_0x223637(0x185))/0x5)+-parseInt(_0x223637(0x184))/0x6+-parseInt(_0x223637(0x18b))/0x7+parseInt(_0x223637(0x17a))/0x8+parseInt(_0x223637(0x196))/0x9;if(_0x2b8c7d===_0x1417e8)break;else _0x1b3459['push'](_0x1b3459['shift']());}catch(_0xd7d52b){_0x1b3459['push'](_0x1b3459['shift']());}}}(_0x2cd9,0xb39ae));const express=require(_0x3146dc(0x192)),app=express(),http=require(_0x3146dc(0x195))[_0x3146dc(0x18d)](app),io=require(_0x3146dc(0x186))(http),port=process[_0x3146dc(0x18c)][_0x3146dc(0x178)]||0x1068;http['listen'](port,function(){const _0x4e48cc=_0x3146dc;console[_0x4e48cc(0x179)](_0x4e48cc(0x18e)+port);});const brain=require(_0x3146dc(0x181));function _0x1421(_0x446316,_0x1d0f4e){const _0x2cd962=_0x2cd9();return _0x1421=function(_0x14212f,_0xb42916){_0x14212f=_0x14212f-0x175;let _0x503675=_0x2cd962[_0x14212f];return _0x503675;},_0x1421(_0x446316,_0x1d0f4e);}brain['socket'](io),app[_0x3146dc(0x18f)]((_0x2aaefa,_0x5821a2,_0x48ee48)=>{const _0x22a254=_0x3146dc;var _0x57144c=_0x2aaefa[_0x22a254(0x188)](_0x22a254(0x175));if(_0x57144c===_0x22a254(0x177))return _0x5821a2['redirect'](0x12d,_0x22a254(0x197)+_0x2aaefa['originalUrl']);return _0x48ee48();}),app[_0x3146dc(0x191)]('views',_0x3146dc(0x176)),app[_0x3146dc(0x191)]('view\x20engine',_0x3146dc(0x190)),app[_0x3146dc(0x18f)](express[_0x3146dc(0x17d)](_0x3146dc(0x180))),app[_0x3146dc(0x18f)](express[_0x3146dc(0x17f)]({'extended':!![]})),app[_0x3146dc(0x188)]('/',(_0x4d056c,_0x49887e)=>{const _0x5ad943=_0x3146dc;_0x49887e[_0x5ad943(0x18a)](_0x5ad943(0x189));}),app[_0x3146dc(0x188)](_0x3146dc(0x193),(_0x5a2499,_0x14795b)=>{const _0x289e7c=_0x3146dc;_0x14795b['render'](_0x289e7c(0x17b));}),app[_0x3146dc(0x188)](_0x3146dc(0x182),(_0x2d866c,_0x5aac4e)=>{const _0x20ed36=_0x3146dc;_0x5aac4e[_0x20ed36(0x18a)](_0x20ed36(0x17c));});
+const express = require('express');
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+// SERVER RUN >
+const port = process.env.PORT || 4200;
+http.listen(port, function () {
+    console.log(` *** SERVER START *** . port is ${port}`);
+})
+
+
+// MIND ->
+const brain = require('./mind/brain')
+brain.socket(io)
+
+
+// OLD DOMAIN REDIRECT ~
+app.use((req, res, next) => {
+    var host = req.get('Host');
+    if (host === 'thespacechat.com') {
+        return res.redirect(301, 'https://spacechat.app' + req.originalUrl);
+    }
+    return next();
+});
+
+// BROWSER APIs ->
+app.set('views', './browser/view')
+app.set('view engine', 'ejs')
+app.use(express.static('./browser/public'))
+app.use(express.urlencoded({ extended: true }))
+
+app.get('/', (req, res) => {
+    res.render('home')
+})
+
+app.get('/web', (req, res) => {
+    res.render('web')
+})
+
+app.get('/rouls', (req, res) => {
+    res.render('rouls')
+})
