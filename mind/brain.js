@@ -276,6 +276,7 @@ function socket(io) {
                 x_alians.shift();
             }
         }
+        
 
         var timeWaiting, timeReading;
         function callAlian(id, ask) {
