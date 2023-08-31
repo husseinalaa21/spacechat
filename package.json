@@ -9,5 +9,12 @@
   "scripts": {
     "devStart": "nodemon server.js",
     "start": "node server.js"
-  }
+  },
+  "name": "spacechat",
+  "description": "",
+  "version": "1.0.0",
+  "main": "server.js",
+  "devDependencies": {},
+  "author": "",
+  "license": "ISC"
 }

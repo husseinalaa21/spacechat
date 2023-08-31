@@ -7,12 +7,23 @@
 }
 
 .contact {
-    padding: 15px;
+    padding: 22px;
     background-color: #528be8;
-    border-radius: 4px;
     font-size: 16px;
     margin-top: 10px;
     margin-bottom: 10px;
+    line-height: 3.3ch;
+}
+
+.contact a {
+    text-decoration: underline;
+    text-decoration-style: wavy;
+    text-decoration-color: #528be8;
+    background-color: #c8d9f4;
+    padding: 4px;
+    border-radius: 3px;
+    margin-right: 4px;
+    margin-left: 4px;
 }
 
 @keyframes gradient {
@@ -53,7 +64,7 @@
     color: white;
     background-color: #0d111700;
     font-size: 28px;
-    text-decoration:underline;
+    text-decoration: underline;
     text-decoration-style: wavy;
     text-decoration-color: #79b3ff;
 }
@@ -74,14 +85,16 @@
     font-size: 15px;
     font-family: 'Righteous', cursive;
 }
+
 .arrow-up {
-    width: 0; 
-    height: 0; 
+    width: 0;
+    height: 0;
     border-left: 12px solid transparent;
     border-right: 12px solid transparent;
     border-bottom: 12px solid #043d669f;
     margin-left: 20px;
-  }
+}
+
 .webEnter {
     font-family: 'Righteous', cursive;
     padding: 10px;
@@ -107,7 +120,7 @@
 }
 
 .ai {
-    min-height: 80px; 
+    min-height: 80px;
     border-bottom: 2px solid #1c222c;
     padding-top: 20px;
     background-color: #11151b;
@@ -171,14 +184,12 @@
     border: 0;
     border-left: 3px;
     border-style: solid;
-    border-image: 
-      linear-gradient(
-        to bottom, 
-        #57b9ff, 
-        #043d66,
-        #57b9ff,
-        #043d66
-      ) 1 100%;
+    border-image:
+        linear-gradient(to bottom,
+            #57b9ff,
+            #043d66,
+            #57b9ff,
+            #043d66) 1 100%;
     width: 90%;
     margin: auto;
 }
