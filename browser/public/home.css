@@ -6,24 +6,48 @@
     animation: gradient 15s ease infinite;
 }
 
-.contact {
-    padding: 22px;
-    background-color: #528be8;
-    font-size: 16px;
+.note_title {
+    padding: 16px;
     margin-top: 10px;
-    margin-bottom: 10px;
+    font-size: 16px;
+    background-color: #528be8;
+}
+
+.contact {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    margin-bottom: 60px;
+    background-color: #5b87ce;
+    height: auto;
+}
+
+.contact .text_con,
+.contact .icon_con {
+    padding: 22px;
     line-height: 3.3ch;
+    height: auto; /* Allow the height to be flexible */
+    z-index: 100;
+}
+
+.contact .text_con {
+    width: 100%;
+    background-color: #457cd6;
+    min-height: 60px;
+}
+
+.contact .icon_con {
+    width: 100px;
+    text-align: center;
 }
 
 .contact a {
     text-decoration: underline;
     text-decoration-style: wavy;
-    text-decoration-color: #528be8;
-    background-color: #c8d9f4;
+    text-decoration-color:  rgb(225, 237, 248);
+    color: white;
     padding: 4px;
-    border-radius: 3px;
-    margin-right: 4px;
-    margin-left: 4px;
+    font-weight: bold;
 }
 
 @keyframes gradient {
