@@ -1,42 +1,48 @@
 const express = require('express');
 const app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
-// SERVER RUN >
+const http = require('http').createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(http);
+
 const port = process.env.PORT || 4200;
-http.listen(port, function () {
+
+http.listen(port, () => {
     console.log(` *** SERVER START *** . port is ${port}`);
-})
+}).on('error', (err) => {
+    console.error('Server failed to start:', err);
+});
 
+// Load brain module safely
+try {
+    const brain = require('./mind/brain');
+    brain.socket(io);
+} catch (err) {
+    console.error('Error loading brain module:', err);
+}
 
-// MIND ->
-const brain = require('./mind/brain')
-brain.socket(io)
-
-
-// OLD DOMAIN REDIRECT ~
+// Redirect old domain
 app.use((req, res, next) => {
-    var host = req.get('Host');
+    const host = req.get('Host');
     if (host === 'thespacechat.com') {
         return res.redirect(301, 'https://spacechat.app' + req.originalUrl);
     }
-    return next();
+    next();
 });
 
-// BROWSER APIs ->
-app.set('views', './browser/view')
-app.set('view engine', 'ejs')
-app.use(express.static('./browser/public'))
-app.use(express.urlencoded({ extended: true }))
+// Browser APIs
+app.set('views', './browser/view');
+app.set('view engine', 'ejs');
+app.use(express.static('./browser/public'));
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-    res.render('home')
-})
+    res.render('home');
+});
 
 app.get('/web', (req, res) => {
-    res.render('web')
-})
+    res.render('web');
+});
 
 app.get('/rouls', (req, res) => {
-    res.render('rouls')
-})
+    res.render('rouls');
+});
