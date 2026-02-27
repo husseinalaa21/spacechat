@@ -33,10 +33,13 @@ app.use((req, res, next) => {
 // Browser APIs
 app.set('views', './browser/view');
 app.set('view engine', 'ejs');
+// Serve view assets
 app.use(express.static('./browser/public'));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('./browser/public'));       
-app.use(express.static('./public_root'));   
+// Expose top-level `public` at `/public` so URLs like `/public/spacechat_social.jpg` work
+app.use('/public', express.static('./public'));
+// Keep any additional static root used by the app
+app.use(express.static('./public_root'));
 
 app.get('/', (req, res) => {
     res.render('home');
