@@ -28,12 +28,15 @@ app.use((req, res, next) => {
     }
     next();
 });
+               
 
 // Browser APIs
 app.set('views', './browser/view');
 app.set('view engine', 'ejs');
 app.use(express.static('./browser/public'));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('./browser/public'));       
+app.use(express.static('./public_root'));   
 
 app.get('/', (req, res) => {
     res.render('home');
